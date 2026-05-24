@@ -20,7 +20,6 @@ class GalleryScreen(Screen[None]):
 
     DEMOS = [
         ("Inputs & Forms",       "inputs",   "Input, TextArea, Checkbox, Switch, Select, RadioSet, Button"),
-        ("Data Display",         "data",     "DataTable, RichLog, Markdown — across three tabs"),
         ("Layout & Navigation",  "layout",   "Grid layout, Collapsible sections, Tree widget"),
         ("Progress & Feedback",  "progress", "ProgressBar, Digits, Sparkline, LoadingIndicator, Toast, Modal"),
         ("Work Items Dashboard", "dashboard","The original two-pane dashboard with row drill-down"),
@@ -31,7 +30,6 @@ class GalleryScreen(Screen[None]):
         ("Streaming Log",       "logstream",  "RichLog fed by an async worker — live scrolling log output"),
         ("Multi-step Wizard",   "wizard",     "Step-by-step form with Back / Next / Submit and a review pane"),
         ("Markdown Report",     "report",       "Report viewer with Markdown tables, code blocks, and callouts"),
-        ("Search & Filter",     "searchfilter", "Live Input filters a DataTable as you type"),
         ("Settings Screen",     "settings",     "Category sidebar with forms — resizable like other sidebars"),
         ("Concurrent Workers",  "workers",      "Multiple @work tasks running in parallel with individual progress bars"),
         ("Context Menu",        "contextmenu",  "Press Enter on a DataTable row to open a ModalScreen action menu"),
@@ -56,7 +54,6 @@ class GalleryScreen(Screen[None]):
         ("Log vs RichLog",      "log",              "Plain Log (no markup) side-by-side with RichLog — write, clear, max_lines"),
         ("Tabs (standalone)",   "tabs",             "Tabs widget driving ContentSwitcher manually — dynamic add/remove at runtime"),
         ("Master / Detail",          "masterdetail",         "Navigating a master DataTable populates a child step table in real time"),
-        ("Master / Detail (vertical)", "masterdetailvertical", "Same pattern with master table above and detail table below"),
         ("Form + Table",               "formtable",            "Selecting a row in the grid populates the edit form above it"),
         ("Label Form",                 "labelform",            "Each field on its own line — label on the left, input on the right"),
         ("Search → Grid → Edit",       "searchgrid",           "Filter bar, pageable results grid, row opens a full edit form"),
