@@ -1,0 +1,33 @@
+/* ── Tabs demo ──────────────────────────────────────────────── */
+
+#tabs-outer {
+    height: 1fr;
+    background: $surface;
+}
+
+#tabs-bar {
+    height: auto;
+}
+
+#tabs-switcher {
+    height: 1fr;
+}
+
+.tabs-panel {
+    padding: 2 4;
+    height: 1fr;
+    background: $surface;
+}
+
+#tabs-actions {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border-top: solid $primary;
+    align: left middle;
+}
+
+#tabs-dyn-label {
+    margin-left: 2;
+    color: $text-muted;
+}

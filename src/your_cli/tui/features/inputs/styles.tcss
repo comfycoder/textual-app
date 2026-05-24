@@ -1,0 +1,7 @@
+/* ── Inputs demo ────────────────────────────────────────────── */
+
+#inputs-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}

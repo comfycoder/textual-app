@@ -1,0 +1,25 @@
+/* ── Command palette ────────────────────────────────────────── */
+
+CommandPaletteModal {
+    align: center middle;
+}
+
+#cp-modal-body {
+    width: 60;
+    height: auto;
+    padding: 1 2;
+    border: solid $primary;
+    background: $surface;
+}
+
+#cp-list {
+    height: 15;
+    margin-top: 1;
+}
+
+#cp-hint {
+    height: auto;
+    padding: 2 4;
+    color: $text-muted;
+    background: $surface;
+}

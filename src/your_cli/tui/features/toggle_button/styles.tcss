@@ -1,0 +1,25 @@
+/* ── Toggle button demo ─────────────────────────────────────── */
+
+#tb-body {
+    height: 1fr;
+    background: $surface;
+}
+
+#tb-left {
+    width: 55%;
+    padding: 1 2;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#tb-right {
+    width: 1fr;
+    padding: 1 4;
+    background: $surface;
+}
+
+#tb-actions {
+    height: auto;
+    margin-top: 2;
+    align: left middle;
+}

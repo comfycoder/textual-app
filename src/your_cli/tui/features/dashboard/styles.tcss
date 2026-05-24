@@ -1,0 +1,35 @@
+/* ── Dashboard ──────────────────────────────────────────────── */
+
+#sidebar {
+    width: 30%;
+    min-width: 28;
+    padding: 1 2;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#main {
+    width: 1fr;
+    padding: 1 2;
+    background: $surface;
+}
+
+.panel-title {
+    margin-bottom: 1;
+    color: $accent;
+}
+
+DataTable {
+    height: 1fr;
+}
+
+/* ── Detail screen ──────────────────────────────────────────── */
+
+#detail-body {
+    padding: 2 4;
+    background: $surface;
+}
+
+.detail-field {
+    margin-top: 1;
+}

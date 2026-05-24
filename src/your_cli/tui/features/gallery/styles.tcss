@@ -1,0 +1,30 @@
+/* ── Gallery ────────────────────────────────────────────────── */
+
+#gallery-body {
+    height: 1fr;
+}
+
+#gallery-list {
+    min-width: 20;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#gallery-detail {
+    width: 1fr;
+    padding: 2 4;
+    background: $surface;
+}
+
+#gallery-title {
+    color: $accent;
+    margin-bottom: 1;
+}
+
+#gallery-hint {
+    color: $text-muted;
+}
+
+#gallery-desc {
+    margin-top: 1;
+}

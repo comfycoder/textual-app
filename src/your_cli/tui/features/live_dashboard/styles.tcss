@@ -1,0 +1,13 @@
+/* ── Live dashboard ─────────────────────────────────────────── */
+
+#live-status-bar {
+    height: auto;
+    padding: 0 1;
+    background: $panel;
+    border-bottom: solid $primary;
+    align: left middle;
+}
+
+.refresh-btn {
+    margin-left: 1;
+}

@@ -1,0 +1,27 @@
+/* ── Tooltip demo ───────────────────────────────────────────── */
+
+#tt-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+#tt-buttons {
+    height: auto;
+    align: left middle;
+    margin-bottom: 1;
+}
+
+#tt-form {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border: solid $primary;
+    margin-bottom: 1;
+}
+
+#tt-toggles {
+    height: auto;
+    align: left middle;
+    margin-bottom: 1;
+}

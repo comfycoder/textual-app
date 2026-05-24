@@ -1,0 +1,34 @@
+/* ── Rule demo ──────────────────────────────────────────────── */
+
+#rule-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+.rule-style-label {
+    margin-top: 1;
+}
+
+#rule-v-row {
+    height: 6;
+    margin-bottom: 1;
+    align: left middle;
+}
+
+.rule-panel {
+    width: 1fr;
+    padding: 0 2;
+}
+
+#rule-form {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border: solid $primary;
+}
+
+.rule-field {
+    margin-bottom: 1;
+    color: $text-muted;
+}

@@ -1,0 +1,33 @@
+/* ── Content switcher ───────────────────────────────────────── */
+
+#cs-body {
+    height: 1fr;
+}
+
+#cs-sidebar {
+    width: 25%;
+    min-width: 18;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#cs-sidebar-title {
+    padding: 1 2;
+    color: $accent;
+}
+
+#cs-nav {
+    height: 1fr;
+}
+
+#cs-switcher {
+    width: 1fr;
+    height: 1fr;
+    background: $surface;
+}
+
+.cs-panel {
+    padding: 2 4;
+    height: 1fr;
+    background: $surface;
+}

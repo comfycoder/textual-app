@@ -1,0 +1,160 @@
+/* ── Search → Grid → Edit ───────────────────────────────────── */
+
+#sg-body {
+    height: 1fr;
+}
+
+#sg-search-panel {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border-bottom: solid $primary;
+}
+
+#sg-search-title {
+    padding: 0 0 1 0;
+    color: $accent;
+}
+
+.sg-filter-row {
+    height: auto;
+    align: left top;
+}
+
+.sg-filter-field {
+    width: 1fr;
+    height: auto;
+    padding-right: 2;
+}
+
+#sg-search-actions {
+    height: auto;
+    margin-top: 1;
+    align: left middle;
+}
+
+#sg-search-spacer {
+    width: 1fr;
+}
+
+#sg-result-count {
+    width: auto;
+    height: 3;
+    padding: 0 1;
+    color: $text-muted;
+    content-align: left middle;
+}
+
+#sg-per-page-label {
+    width: auto;
+    padding: 1 1 0 2;
+    color: $text-muted;
+}
+
+#sg-page-size {
+    width: 12;
+}
+
+#sg-grid-area {
+    height: 1fr;
+}
+
+#sg-table {
+    height: 1fr;
+}
+
+#sg-pagination {
+    height: auto;
+    padding: 0 2;
+    background: $panel;
+    border-top: solid $primary;
+    align: left middle;
+}
+
+#sg-page-label {
+    width: auto;
+    height: 3;
+    padding: 0 2;
+    color: $text-muted;
+    content-align: left middle;
+}
+
+/* Edit Job screen (pushed from search grid) */
+
+#ej-body {
+    height: 1fr;
+    overflow-y: scroll;
+}
+
+#ej-form {
+    height: auto;
+    padding: 1 4;
+    background: $panel;
+}
+
+#ej-title {
+    padding: 0 0 1 0;
+    color: $accent;
+}
+
+.ej-section {
+    height: auto;
+    margin-top: 1;
+    color: $text-muted;
+}
+
+.ej-row {
+    height: auto;
+    align: left top;
+}
+
+.ej-label {
+    width: 24;
+    padding: 1 2 0 0;
+    text-align: right;
+    color: $text-muted;
+}
+
+.ej-row > Input,
+.ej-row > Select {
+    width: 1fr;
+}
+
+.ej-id-display {
+    height: 3;
+    padding: 1 0 1 3;
+}
+
+.ej-toggle-row {
+    height: 3;
+    align: left middle;
+}
+
+.ej-toggle-row > .ej-label {
+    padding: 0 2 0 0;
+}
+
+
+/* SelectCurrent error background is applied via inline style in Python
+   (widget.styles.background = None to reset) — CSS class rules don't reliably
+   override SelectCurrent DEFAULT_CSS. */
+
+#ej-errors {
+    height: auto;
+    padding: 0 1;
+    margin: 1 0;
+    border: solid $error;
+    background: $error 15%;
+}
+
+#ej-error-list {
+    height: auto;
+    padding: 1 1;
+    color: $error;
+}
+
+#ej-actions {
+    height: auto;
+    padding: 1 0;
+    align: right middle;
+}

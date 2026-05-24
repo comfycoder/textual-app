@@ -1,0 +1,22 @@
+/* ── Cards demo 2 ───────────────────────────────────────────── */
+
+#cd2-body {
+    height: 1fr;
+    padding: 1 2;
+    background: $surface;
+}
+
+.cd2-section {
+    margin: 1 0 1 0;
+    color: $accent;
+}
+
+.cd2-row {
+    height: auto;
+    margin-bottom: 1;
+    align: left top;
+}
+
+.cd2-row > * {
+    margin-right: 1;
+}

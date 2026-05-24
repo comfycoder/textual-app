@@ -1,0 +1,39 @@
+/* ── Master / Detail vertical ──────────────────────────────── */
+
+#mdv-body {
+    height: 1fr;
+}
+
+#mdv-master {
+    height: 40%;
+    background: $panel;
+    border-bottom: solid $primary;
+}
+
+#mdv-master-title {
+    height: auto;
+    padding: 0 1;
+    background: $panel;
+    border-bottom: solid $primary;
+    color: $text-muted;
+}
+
+#mdv-master-table {
+    height: 1fr;
+}
+
+#mdv-detail {
+    height: 1fr;
+    background: $surface;
+}
+
+#mdv-detail-header {
+    height: auto;
+    padding: 0 1;
+    background: $boost;
+    border-bottom: solid $primary;
+}
+
+#mdv-detail-table {
+    height: 1fr;
+}

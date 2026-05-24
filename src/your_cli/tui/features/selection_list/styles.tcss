@@ -1,0 +1,23 @@
+/* ── SelectionList demo ─────────────────────────────────────── */
+
+#sl-body {
+    height: 1fr;
+    background: $surface;
+}
+
+#sl-left {
+    width: 50%;
+    padding: 1 2;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#sl-right {
+    width: 1fr;
+    padding: 1 4;
+    background: $surface;
+}
+
+#sl-hint {
+    margin-bottom: 1;
+}

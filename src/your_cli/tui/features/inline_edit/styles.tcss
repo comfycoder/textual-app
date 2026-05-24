@@ -1,0 +1,22 @@
+/* ── Inline edit ────────────────────────────────────────────── */
+
+#edit-hint {
+    height: auto;
+    padding: 0 1;
+    margin-bottom: 1;
+    color: $text-muted;
+}
+
+#edit-panel {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border-top: solid $primary;
+    margin-top: 1;
+}
+
+#edit-actions {
+    height: auto;
+    margin-top: 1;
+    align: left middle;
+}

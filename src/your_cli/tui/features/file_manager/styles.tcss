@@ -1,0 +1,34 @@
+/* ── File manager demo ──────────────────────────────────────── */
+
+#files-body {
+    height: 1fr;
+}
+
+#file-tree {
+    min-width: 20;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#file-preview {
+    width: 1fr;
+    padding: 0 1;
+    background: $surface;
+}
+
+#file-content {
+    height: 1fr;
+}
+
+#path-bar {
+    height: auto;
+    padding: 1 0;
+    background: $panel;
+    border-top: solid $primary;
+    align: left middle;
+}
+
+#selected-path {
+    width: 1fr;
+    color: $text-muted;
+}

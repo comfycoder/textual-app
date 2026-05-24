@@ -1,0 +1,34 @@
+/* ── API file browser demo ──────────────────────────────────── */
+
+#api-files-body {
+    height: 1fr;
+}
+
+#api-tree {
+    min-width: 20;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#api-detail {
+    width: 1fr;
+    padding: 0 1;
+    background: $surface;
+}
+
+#api-content {
+    height: 1fr;
+}
+
+#api-path-bar {
+    height: auto;
+    padding: 1 0;
+    background: $panel;
+    border-top: solid $primary;
+    align: left middle;
+}
+
+#api-selected-path {
+    width: 1fr;
+    color: $text-muted;
+}

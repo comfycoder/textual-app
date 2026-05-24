@@ -1,0 +1,19 @@
+/* ── Form validation ────────────────────────────────────────── */
+
+.field-error {
+    height: auto;
+    padding: 0 1;
+    margin-bottom: 1;
+}
+
+#vf-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+#vf-actions {
+    height: auto;
+    margin-top: 2;
+    align: left middle;
+}

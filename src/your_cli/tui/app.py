@@ -2,8 +2,8 @@
 
 from textual.app import App
 
+import your_cli.tui.routes  # noqa: F401 — side-effect: populates the route registry
 from your_cli.config import Settings
-from your_cli.tui.screens.gallery import GalleryScreen
 from your_cli.tui.themes import ALL_THEMES
 
 
@@ -28,7 +28,8 @@ class YourCliApp(App[None]):
         for theme in ALL_THEMES:
             self.register_theme(theme)
         self.theme = "aiq"
-        self.push_screen(GalleryScreen())
+        from your_cli.tui.router import navigate
+        navigate(self, "gallery")
 
     def action_toggle_dark(self) -> None:
         self.theme = "textual-light" if self.theme == "textual-dark" else "textual-dark"

@@ -1,0 +1,29 @@
+/* ── OptionList demo ─────────────────────────────────────────── */
+
+#ol-body {
+    height: 1fr;
+    background: $surface;
+}
+
+#ol-left {
+    width: 30%;
+    min-width: 26;
+    padding: 1 2;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#ol-right {
+    width: 1fr;
+    padding: 1 4;
+    background: $surface;
+}
+
+#ol-nav-hint {
+    margin-bottom: 1;
+}
+
+.ol-result {
+    margin-top: 2;
+    color: $success;
+}

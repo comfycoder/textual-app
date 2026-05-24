@@ -1,0 +1,59 @@
+/* ── Label Form ─────────────────────────────────────────────── */
+
+#lf-body {
+    height: 1fr;
+    overflow-y: scroll;
+}
+
+#lf-form {
+    height: auto;
+    padding: 1 4;
+    background: $panel;
+}
+
+#lf-title {
+    padding: 0 0 1 0;
+}
+
+.lf-section {
+    height: auto;
+    margin-top: 1;
+    color: $text-muted;
+}
+
+.lf-row {
+    height: auto;
+    margin-top: 0;
+    align: left top;
+}
+
+.lf-label {
+    width: 24;
+    padding: 1 2 0 0;
+    text-align: right;
+    color: $text-muted;
+}
+
+.lf-row > Input,
+.lf-row > Select {
+    width: 1fr;
+}
+
+.lf-toggle-row {
+    height: 3;
+    align: left middle;
+}
+
+.lf-toggle-row > .lf-label {
+    padding: 0 2 0 0;
+}
+
+#lf-actions {
+    height: auto;
+    padding: 1 0;
+    align: left middle;
+}
+
+#lf-msg {
+    padding: 0 2;
+}

@@ -1,0 +1,52 @@
+/* ── Notification drawer ────────────────────────────────────── */
+
+#nd-body {
+    height: 1fr;
+    background: $surface;
+}
+
+#nd-main {
+    width: 1fr;
+    padding: 1 4;
+    background: $surface;
+}
+
+#nd-buttons {
+    height: auto;
+    margin-top: 1;
+    margin-bottom: 1;
+    align: left middle;
+}
+
+#nd-drawer {
+    width: 40%;
+    min-width: 30;
+    background: $panel;
+    border-left: solid $primary;
+}
+
+#nd-drawer-header {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border-bottom: solid $primary;
+    align: left middle;
+}
+
+#nd-drawer-title {
+    width: 1fr;
+    color: $accent;
+}
+
+.nd-close-btn {
+    min-width: 3;
+}
+
+.nd-clear-btn {
+    margin: 1 2;
+}
+
+#nd-log {
+    height: 1fr;
+    padding: 0 1;
+}

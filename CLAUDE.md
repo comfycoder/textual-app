@@ -30,20 +30,26 @@ pytest                                    # Run tests
 
 ## Architecture
 
-**Entry flow:** `your-cli` CLI (Typer) → `src/your_cli/cli.py::run()` → loads Pydantic `Settings` → instantiates `YourCliApp` → pushes `GalleryScreen`.
+**Entry flow:** `your-cli` CLI (Typer) → `src/your_cli/cli.py::run()` → loads Pydantic `Settings` → instantiates `YourCliApp` → `navigate(self, "gallery")`.
 
 **Source layout:**
 - `src/your_cli/cli.py` — CLI entry point; also handles `login`/`logout` subcommands
 - `src/your_cli/config.py` — Pydantic `Settings`; env prefix `AIQ_`, optional `.env` via `--config`
 - `src/your_cli/tui/app.py` — Root `YourCliApp`; registers 7 themes on mount; global bindings `q` (quit), `d` (dark toggle)
 - `src/your_cli/tui/themes.py` — 7 themes (AIQ, AIQ_DARK, Nord, Gruvbox, Dracula, Solarized Light, Warm Linen)
-- `src/your_cli/tui/styles.tcss` — Global Textual CSS
-- `src/your_cli/tui/screens/` — 44 screen files (gallery, dashboard, detail, 40 demo_*.py files)
+- `src/your_cli/tui/styles.tcss` — Global CSS only: `Screen`, `Switch`, shared `.demo-label`/`.demo-row` utilities, form-validation helpers, `ConfirmModal`
+- `src/your_cli/tui/router.py` — `navigate(app, key)` lazy-loads the screen module via `importlib` and calls `app.push_screen()`
+- `src/your_cli/tui/routes.py` — **Single source of truth** for all routes: 45 `register(key, module_path, class_name)` calls; edit only this file to add, rename, or remove a screen
+- `src/your_cli/tui/widgets/` — 12 reusable widget classes (10 card types, `MetricCard`, `StatusBadge`); import with `from your_cli.tui.widgets import MetricCard, AlertCard`
+- `src/your_cli/tui/features/` — 45 feature packages, one per screen (or screen-group); each contains `__init__.py`, `screen.py`, and `styles.tcss`
+  - `features/gallery/` — navigation hub (`GalleryScreen`)
+  - `features/dashboard/` — two-pane dashboard; also contains `detail.py` (`DetailScreen`)
+  - `features/<name>/` — one package per demo (43 total)
 - `src/your_cli/client/` — Auto-generated OpenAPI client; never hand-edit
 
-**Screen navigation:** `app.push_screen()` / `app.pop_screen()`; Escape triggers `action_go_back()` in each demo screen. `GalleryScreen` is the hub: its ListView dynamically imports and opens demo screens on Enter.
+**Screen navigation:** `navigate(app, key)` in `router.py` lazy-imports the target module on first use and calls `app.push_screen()`. Escape calls `app.pop_screen()` via `action_go_back()` in each screen. `GalleryScreen` is the hub: its `ListView.Selected` handler calls `navigate(self.app, key)`. `routes.py` is the only file that maps route keys to screen modules.
 
-**Most complete demo:** `demo_search_grid.py` — filter bar + pageable DataTable + sortable columns + full edit form with validation; good reference for complex screen patterns.
+**Most complete demo:** `features/search_grid/screen.py` — filter bar + pageable DataTable + sortable columns + full edit form with validation; good reference for complex screen patterns.
 
 ---
 
@@ -64,9 +70,19 @@ AIQ_CLIENT_ID=00000000-0000-0000-0000-000000000000
 
 Three touch-points are required every time:
 
-1. **Create** `src/your_cli/tui/screens/demo_<key>.py` with a `Screen[None]` subclass and `BINDINGS = [Binding("escape", "go_back", "Back")]`.
-2. **Register** in `GalleryScreen.DEMOS` (`gallery.py`) — add a `("Display Name", "<key>", "description")` tuple.
-3. **Wire** in `GalleryScreen._open_demo()` (`gallery.py`) — add the import and map `"<key>": YourScreenClass` in the `screens` dict.
+1. **Create** `src/your_cli/tui/features/<key>/` containing three files:
+   - `__init__.py` — one line: `"""Feature package."""`
+   - `screen.py` — `Screen[None]` subclass with `CSS_PATH = Path(__file__).parent / "styles.tcss"` and `BINDINGS = [Binding("escape", "go_back", "Back")]`
+   - `styles.tcss` — feature-scoped CSS (can be empty to start)
+
+2. **Register the gallery entry** in `GalleryScreen.DEMOS` (`features/gallery/screen.py`) — add a `("Display Name", "<key>", "one-line description")` tuple.
+
+3. **Register the route** in `routes.py` — add one line:
+   ```python
+   register("<key>", "your_cli.tui.features.<key>.screen", "YourScreenClass")
+   ```
+
+`GalleryScreen._open_demo()` calls `navigate(self.app, key)`, which picks up the new entry automatically. No other files need to change.
 
 ---
 

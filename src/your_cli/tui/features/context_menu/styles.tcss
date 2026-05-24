@@ -1,0 +1,31 @@
+/* ── Context menu ───────────────────────────────────────────── */
+
+ContextMenuModal {
+    align: center middle;
+}
+
+#ctx-modal-body {
+    width: 44;
+    height: auto;
+    padding: 1 2;
+    border: solid $primary;
+    background: $surface;
+}
+
+#ctx-title {
+    margin-bottom: 1;
+    padding-bottom: 1;
+    color: $accent;
+    border-bottom: solid $primary;
+}
+
+#ctx-list {
+    height: auto;
+}
+
+#ctx-hint {
+    height: auto;
+    padding: 0 1;
+    margin-bottom: 1;
+    color: $text-muted;
+}

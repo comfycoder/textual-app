@@ -1,0 +1,26 @@
+/* ── Wizard ─────────────────────────────────────────────────── */
+
+#wizard-body {
+    padding: 2 4;
+    height: 1fr;
+    background: $surface;
+}
+
+.wizard-step {
+    height: auto;
+}
+
+.wizard-title {
+    margin-bottom: 1;
+    color: $accent;
+}
+
+#wizard-step-label {
+    margin-bottom: 1;
+    color: $text-muted;
+}
+
+#wizard-nav {
+    height: auto;
+    margin-top: 2;
+}

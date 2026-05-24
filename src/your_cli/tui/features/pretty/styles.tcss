@@ -1,0 +1,26 @@
+/* ── Pretty demo ────────────────────────────────────────────── */
+
+#pp-body {
+    height: 1fr;
+    background: $surface;
+}
+
+#pp-left {
+    width: 25%;
+    min-width: 20;
+    padding: 1 2;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#pp-right {
+    width: 1fr;
+    padding: 1 4;
+    background: $surface;
+    overflow: auto scroll;
+}
+
+#pp-widget {
+    height: auto;
+    margin-top: 1;
+}

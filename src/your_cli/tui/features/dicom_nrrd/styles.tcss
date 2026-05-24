@@ -1,0 +1,22 @@
+/* ── DICOM → NRRD demo ──────────────────────────────────────────── */
+
+#dn-body {
+    height: 1fr;
+    padding: 1 2;
+    background: $surface;
+}
+
+.dn-section {
+    margin: 1 0 1 0;
+    color: $accent;
+}
+
+.dn-row {
+    height: auto;
+    margin-bottom: 1;
+    align: left top;
+}
+
+.dn-row > * {
+    margin-right: 1;
+}

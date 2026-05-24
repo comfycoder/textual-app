@@ -1,0 +1,22 @@
+/* ── Cards demo ─────────────────────────────────────────────── */
+
+#crd-body {
+    height: 1fr;
+    padding: 1 2;
+    background: $surface;
+}
+
+.crd-section {
+    margin: 1 0 1 0;
+    color: $accent;
+}
+
+.crd-row {
+    height: auto;
+    margin-bottom: 1;
+    align: left top;
+}
+
+.crd-row > * {
+    margin-right: 1;
+}

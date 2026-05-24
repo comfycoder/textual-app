@@ -1,0 +1,40 @@
+/* ── Master / Detail ────────────────────────────────────────── */
+
+#md-body {
+    height: 1fr;
+}
+
+#md-master {
+    width: 45%;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#md-master-title {
+    height: auto;
+    padding: 0 1;
+    background: $panel;
+    border-bottom: solid $primary;
+    color: $text-muted;
+}
+
+#md-master-table {
+    height: 1fr;
+}
+
+#md-detail {
+    width: 1fr;
+    background: $surface;
+}
+
+#md-detail-header {
+    height: auto;
+    padding: 0 1;
+    background: $boost;
+    border-bottom: solid $primary;
+}
+
+#md-detail-table {
+    height: 1fr;
+    padding: 0 1;
+}

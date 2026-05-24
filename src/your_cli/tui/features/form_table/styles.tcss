@@ -1,0 +1,88 @@
+/* ── Form + Table ───────────────────────────────────────────── */
+
+#ft-body {
+    height: 1fr;
+    overflow-y: scroll;
+}
+
+#ft-form {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border-bottom: solid $primary;
+}
+
+#ft-form-title {
+    margin-bottom: 0;
+    color: $accent;
+}
+
+.ft-section {
+    height: auto;
+    margin-top: 1;
+    color: $text-muted;
+}
+
+.ft-row {
+    height: auto;
+    margin-top: 1;
+    align: left top;
+}
+
+.ft-field {
+    width: 1fr;
+    height: auto;
+    padding-right: 2;
+}
+
+.ft-field-full {
+    width: 100%;
+    margin-top: 1;
+    padding-right: 0;
+}
+
+.ft-field-toggles {
+    height: auto;
+}
+
+.ft-toggle-row {
+    height: auto;
+    margin-top: 1;
+    align: left middle;
+}
+
+.ft-toggle-label {
+    margin-left: 1;
+}
+
+.ft-id {
+    height: auto;
+    padding: 0 1;
+    color: $text-muted;
+}
+
+#ft-form-actions {
+    height: auto;
+    margin-top: 1;
+    align: left middle;
+}
+
+#ft-status-msg {
+    margin-left: 2;
+}
+
+#ft-table-area {
+    height: auto;
+    background: $surface;
+}
+
+#ft-table-hint {
+    height: auto;
+    padding: 0 1;
+    background: $boost;
+    border-bottom: solid $primary;
+}
+
+#ft-table {
+    height: 30;
+}

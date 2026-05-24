@@ -1,0 +1,13 @@
+/* ── Log stream ─────────────────────────────────────────────── */
+
+#log-controls {
+    height: auto;
+    padding: 0 1;
+    background: $panel;
+    border-bottom: solid $primary;
+    align: left middle;
+}
+
+#log-output {
+    height: 1fr;
+}

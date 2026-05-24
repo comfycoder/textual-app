@@ -1,0 +1,31 @@
+/* ── Log demo ───────────────────────────────────────────────── */
+
+#lg-controls {
+    height: auto;
+    padding: 0 1;
+    background: $panel;
+    border-bottom: solid $primary;
+    align: left middle;
+}
+
+#lg-body {
+    height: 1fr;
+    background: $surface;
+}
+
+#lg-left {
+    width: 1fr;
+    padding: 0 1;
+    border-right: solid $primary;
+    background: $surface;
+}
+
+#lg-right {
+    width: 1fr;
+    padding: 0 1;
+    background: $surface;
+}
+
+Log {
+    height: 1fr;
+}

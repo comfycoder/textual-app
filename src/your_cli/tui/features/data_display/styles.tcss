@@ -1,0 +1,11 @@
+/* ── Data demo ──────────────────────────────────────────────── */
+
+TabbedContent {
+    height: 1fr;
+}
+
+TabPane {
+    height: 1fr;
+    padding: 1 2;
+    background: $surface;
+}
