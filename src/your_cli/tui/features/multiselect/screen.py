@@ -42,7 +42,7 @@ class MultiSelectDemoScreen(Screen[None]):
         Binding("d",      "deselect_all",  "None"),
     ]
 
-    _selected: reactive[frozenset] = reactive(frozenset())
+    _selected: reactive[frozenset[str]] = reactive(frozenset())
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -75,7 +75,7 @@ class MultiSelectDemoScreen(Screen[None]):
         )
         table.focus()
 
-    def watch__selected(self, selected: frozenset) -> None:
+    def watch__selected(self, selected: frozenset[str]) -> None:
         count = len(selected)
         self.query_one("#ms-count", Static).update(
             f"  [b]{count}[/b] of [b]{len(_ALL_ITEMS)}[/b] selected"
@@ -95,6 +95,8 @@ class MultiSelectDemoScreen(Screen[None]):
         if table.cursor_row is None:
             return
         row_key = table.ordered_rows[table.cursor_row].key.value
+        if row_key is None:
+            return
         current = set(self._selected)
         if row_key in current:
             current.discard(row_key)

@@ -15,6 +15,8 @@ from textual.binding import Binding
 from textual.containers import Horizontal
 from textual.reactive import reactive
 from textual.screen import Screen
+from typing import Any
+
 from textual.widgets import Button, DataTable, Footer, Header, Label, Static
 
 REFRESH_SECONDS = 10
@@ -36,7 +38,7 @@ _BASE_ITEMS = [
 ]
 
 
-async def _fake_api_fetch() -> list[dict]:
+async def _fake_api_fetch() -> list[dict[str, Any]]:
     """Simulated API call — replace with real httpx call."""
     await asyncio.sleep(0.4)
     now = datetime.now().strftime("%H:%M:%S")

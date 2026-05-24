@@ -4,49 +4,26 @@ from pathlib import Path
 
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.containers import ScrollableContainer, Vertical
-from textual.screen import ModalScreen, Screen
-from textual.widgets import Button, DataTable, Footer, Header, Label, Static
+from textual.containers import ScrollableContainer
+from textual.screen import Screen
+from textual.widgets import DataTable, Footer, Header, Static
 
-
-class HelpModal(ModalScreen[None]):
-    BINDINGS = [Binding("escape", "dismiss", "Close")]
-
-    def __init__(self, bindings: list[tuple[str, str, str]]) -> None:
-        super().__init__()
-        self._bindings = bindings
-
-    def compose(self) -> ComposeResult:
-        with Vertical(id="help-modal-body"):
-            yield Label("[b]Keyboard Reference[/b]", id="help-modal-title")
-            tbl = DataTable(id="help-table", show_cursor=False)
-            yield tbl
-            yield Button("Close", variant="primary", id="btn-help-close")
-
-    def on_mount(self) -> None:
-        tbl = self.query_one(DataTable)
-        tbl.add_columns("Key", "Action", "Description")
-        for key, action, desc in self._bindings:
-            if desc:
-                tbl.add_row(f"[b]{key}[/b]", action, desc)
-
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        self.dismiss()
+from your_cli.tui.features.help_keys.modal import HelpModal
 
 
 class HelpKeysDemoScreen(Screen[None]):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape",   "go_back",    "Back"),
-        Binding("?",        "show_help",  "Help"),
-        Binding("r",        "refresh",    "Refresh data"),
-        Binding("f",        "toggle_filter","Toggle filter"),
-        Binding("e",        "export",     "Export CSV"),
-        Binding("ctrl+a",   "select_all", "Select all"),
-        Binding("ctrl+d",   "deselect",   "Deselect"),
-        Binding("[",        "narrow",     "Narrow sidebar"),
-        Binding("]",        "widen",      "Widen sidebar"),
-        Binding("ctrl+r",   "hard_refresh","Hard refresh"),
+        Binding("escape",   "go_back",       "Back"),
+        Binding("?",        "show_help",     "Help"),
+        Binding("r",        "refresh",       "Refresh data"),
+        Binding("f",        "toggle_filter", "Toggle filter"),
+        Binding("e",        "export",        "Export CSV"),
+        Binding("ctrl+a",   "select_all",    "Select all"),
+        Binding("ctrl+d",   "deselect",      "Deselect"),
+        Binding("[",        "narrow",        "Narrow sidebar"),
+        Binding("]",        "widen",         "Widen sidebar"),
+        Binding("ctrl+r",   "hard_refresh",  "Hard refresh"),
     ]
 
     def compose(self) -> ComposeResult:
@@ -70,17 +47,17 @@ class HelpKeysDemoScreen(Screen[None]):
         yield Footer()
 
     def on_mount(self) -> None:
-        tbl = self.query_one("#hk-preview", DataTable)
+        tbl: DataTable[str] = self.query_one("#hk-preview", DataTable)
         tbl.add_columns("Key", "Action", "Description")
-        for binding in self.BINDINGS:
-            if binding.description:
-                tbl.add_row(f"[b]{binding.key}[/b]", binding.action, binding.description)
+        for b in self.BINDINGS:
+            if isinstance(b, Binding) and b.description:
+                tbl.add_row(f"[b]{b.key}[/b]", b.action, b.description)
 
     def action_show_help(self) -> None:
         rows = [
             (b.key, b.action, b.description)
             for b in self.BINDINGS
-            if b.description
+            if isinstance(b, Binding) and b.description
         ]
         self.app.push_screen(HelpModal(rows))
 

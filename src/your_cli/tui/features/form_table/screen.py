@@ -2,6 +2,7 @@
 
 import random
 from pathlib import Path
+from typing import Any
 
 from textual.app import ComposeResult
 from textual.binding import Binding
@@ -188,7 +189,7 @@ class FormTableDemoScreen(Screen[None]):
         tbl.focus()
         self._populate_form(_RECORDS[0])
 
-    def _add_table_row(self, tbl: DataTable, rec: dict) -> None:
+    def _add_table_row(self, tbl: DataTable[Any], rec: dict[str, Any]) -> None:
         sc = _STATUS_COLORS.get(rec["status"], "white")
         pc = _PRI_COLORS.get(rec["priority"], "white")
         tbl.add_row(
@@ -209,7 +210,7 @@ class FormTableDemoScreen(Screen[None]):
             if rec:
                 self._populate_form(rec)
 
-    def _populate_form(self, rec: dict) -> None:
+    def _populate_form(self, rec: dict[str, Any]) -> None:
         self._editing_id = rec["id"]
         self.query_one("#ft-id-display",   Static).update(f"[b]{rec['id']}[/b]")
         self.query_one("#ft-tenant",       Input).value  = rec["tenant"]
@@ -271,6 +272,9 @@ class FormTableDemoScreen(Screen[None]):
         if not tenant or any(v is Select.BLANK for v in (jtype, status, pri, env)):
             self.query_one("#ft-status-msg", Static).update("[red]Complete all required fields[/red]")
             return
+
+        # At this point all Select values are confirmed to be str (not NoSelection).
+        assert isinstance(status, str) and isinstance(pri, str)
 
         rec.update({
             "tenant":       tenant,

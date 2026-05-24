@@ -1,5 +1,7 @@
 """ContextMenuModal — action-menu overlay for a DataTable row."""
 
+from typing import Any
+
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Vertical
@@ -18,7 +20,7 @@ _ACTIONS = [
 class ContextMenuModal(ModalScreen[str | None]):
     BINDINGS = [Binding("escape", "dismiss_none", "Close")]
 
-    def __init__(self, item: dict) -> None:
+    def __init__(self, item: dict[str, Any]) -> None:
         super().__init__()
         self._item = item
 

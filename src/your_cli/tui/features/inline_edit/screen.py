@@ -7,6 +7,8 @@ from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
 from textual.screen import Screen
+from typing import Any
+
 from textual.widgets import Button, DataTable, Footer, Header, Input, Label, Select, Static
 
 _STATUS_COLORS = {
@@ -16,7 +18,7 @@ _STATUS_COLORS = {
 _TENANTS  = [("JHU", "jhu"), ("UNC", "unc"), ("Mayo", "mayo")]
 _STATUSES = [(s, s) for s in _STATUS_COLORS]
 
-_DATA: list[dict] = [
+_DATA: list[dict[str, Any]] = [
     {"id": "wi-001", "name": "Alpha pipeline",    "tenant": "jhu",  "status": "running"},
     {"id": "wi-002", "name": "Beta validation",   "tenant": "unc",  "status": "queued"},
     {"id": "wi-003", "name": "Mayo export",       "tenant": "mayo", "status": "done"},

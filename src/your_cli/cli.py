@@ -22,7 +22,7 @@ app = typer.Typer(
 
 
 def _load_settings(config: Path | None, api_base_url: str | None) -> Settings:
-    settings = Settings(_env_file=config) if config else Settings()
+    settings = Settings(_env_file=config) if config else Settings()  # type: ignore[call-arg]
     if api_base_url:
         settings.api_base_url = api_base_url
     return settings

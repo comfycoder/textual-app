@@ -58,7 +58,7 @@ class TooltipDemoScreen(Screen[None]):
 
             yield Static("[b]Data & Progress[/b]", classes="demo-label")
             yield ProgressBar(total=100, id="tt-progress")
-            tbl = DataTable(id="tt-table", show_cursor=False)
+            tbl: DataTable[str] = DataTable(id="tt-table", show_cursor=False)
             yield tbl
 
         yield Footer()

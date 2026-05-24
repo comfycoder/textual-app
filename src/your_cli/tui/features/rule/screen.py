@@ -6,10 +6,13 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, ScrollableContainer, Vertical
 from textual.screen import Screen
+from typing import Literal
+
 from textual.widgets import Footer, Header, Label, Rule, Static
 
-_H_STYLES = ["solid", "heavy", "double", "dashed", "ascii"]
-_V_STYLES = ["solid", "heavy", "double", "dashed", "ascii"]
+_LineStyle = Literal["ascii", "blank", "dashed", "double", "heavy", "hidden", "none", "solid", "thick"]
+_H_STYLES: list[_LineStyle] = ["solid", "heavy", "double", "dashed", "ascii"]
+_V_STYLES: list[_LineStyle] = ["solid", "heavy", "double", "dashed", "ascii"]
 
 
 class RuleDemoScreen(Screen[None]):

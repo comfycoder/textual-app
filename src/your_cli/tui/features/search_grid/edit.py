@@ -267,7 +267,7 @@ class EditJobScreen(Screen[None]):
             self._set_field_error(field_id, False)
             return
         result = inp.validate(val)
-        if result.is_valid:
+        if result is None or result.is_valid:
             self._set_field_error(field_id, False)
         else:
             self._set_field_error(field_id, True,
@@ -302,7 +302,7 @@ class EditJobScreen(Screen[None]):
                 self._set_field_error(field_id, False)
                 return
             result = inp.validate(val)
-            if not result.is_valid:
+            if result is not None and not result.is_valid:
                 self._set_field_error(
                     field_id, True,
                     f"{label}: {result.failures[0].description}",

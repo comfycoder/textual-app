@@ -76,7 +76,7 @@ async def _fake_api_list(path: str) -> list[ApiItem]:
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
-_LOADING = "__loading__"
+_LOADING = ApiItem("__loading__", "…", "file")  # sentinel for "children not yet fetched"
 
 
 def _fmt_size(n: int) -> str:
@@ -141,7 +141,7 @@ class ApiFilesDemoScreen(Screen[None]):
 
     # ── Tree events ───────────────────────────────────────────────────────────
 
-    def on_tree_node_expanded(self, event: Tree.NodeExpanded) -> None:
+    def on_tree_node_expanded(self, event: Tree.NodeExpanded[ApiItem]) -> None:
         node = event.node
         item = node.data
         if not isinstance(item, ApiItem) or item.kind != "folder":
@@ -150,7 +150,7 @@ class ApiFilesDemoScreen(Screen[None]):
         if children and children[0].data == _LOADING:
             self._fetch_children(node, item.path)
 
-    def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
+    def on_tree_node_selected(self, event: Tree.NodeSelected[ApiItem]) -> None:
         item = event.node.data
         if not isinstance(item, ApiItem):
             return
@@ -164,7 +164,7 @@ class ApiFilesDemoScreen(Screen[None]):
     # ── Workers ───────────────────────────────────────────────────────────────
 
     @work
-    async def _fetch_children(self, node: TreeNode, path: str) -> None:
+    async def _fetch_children(self, node: TreeNode[ApiItem], path: str) -> None:
         items = await _fake_api_list(path)
         for child in list(node.children):
             child.remove()

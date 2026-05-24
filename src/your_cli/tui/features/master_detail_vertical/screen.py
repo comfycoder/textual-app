@@ -8,6 +8,8 @@ from textual.binding import Binding
 from textual.containers import Vertical
 from textual.reactive import reactive
 from textual.screen import Screen
+from typing import Any
+
 from textual.widgets import DataTable, Footer, Header, Static
 
 _STATUS_COLORS = {
@@ -31,7 +33,7 @@ _STEPS = {
 random.seed(31)
 
 
-def _make_jobs() -> list[dict]:
+def _make_jobs() -> list[dict[str, Any]]:
     jobs = []
     for i in range(1, 21):
         job_type = random.choice(_TYPES)

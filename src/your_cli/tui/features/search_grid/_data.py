@@ -9,6 +9,7 @@ SearchGridDemoScreen always sees the latest values on resume.
 from __future__ import annotations
 
 import random
+from typing import Any
 
 # ── Select-widget option lists ────────────────────────────────────────────────
 
@@ -45,7 +46,7 @@ _TAGS_POOL = [
 
 random.seed(42)
 
-_RECORDS: list[dict] = [
+_RECORDS: list[dict[str, Any]] = [
     {
         "id":           f"wi-{i:03d}",
         "tenant":       random.choice([v for _, v in _TENANT_OPTS]),
@@ -72,7 +73,7 @@ _RECORDS: list[dict] = [
     for i in range(1, 201)
 ]
 
-_RECORD_BY_ID: dict[str, dict] = {r["id"]: r for r in _RECORDS}
+_RECORD_BY_ID: dict[str, dict[str, Any]] = {r["id"]: r for r in _RECORDS}
 
 # ── Grid display settings ─────────────────────────────────────────────────────
 

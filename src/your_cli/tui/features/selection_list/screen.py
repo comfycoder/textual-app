@@ -59,7 +59,7 @@ class SelectionListDemoScreen(Screen[None]):
         self._update_summary()
 
     def on_selection_list_selection_toggled(
-        self, event: SelectionList.SelectionToggled
+        self, event: SelectionList.SelectionToggled[str]
     ) -> None:
         self._update_summary()
 

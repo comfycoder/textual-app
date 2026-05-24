@@ -2,6 +2,7 @@
 
 import random
 from pathlib import Path
+from typing import Any
 
 from rich.text import Text
 from textual.app import ComposeResult
@@ -40,7 +41,7 @@ _TAGS_POOL  = ["baseline","nightly","ablation","prod","dev","manual","scheduled"
 
 random.seed(42)
 
-_RECORDS: list[dict] = [
+_RECORDS: list[dict[str, Any]] = [
     {
         "id":           f"wi-{i:03d}",
         "tenant":       random.choice([v for _, v in _TENANT_OPTS]),
@@ -305,7 +306,7 @@ class EditJobScreen(Screen[None]):
             return
 
         result = inp.validate(val)
-        if result.is_valid:
+        if result is None or result.is_valid:
             self._set_field_error(field_id, False)
         else:
             self._set_field_error(field_id, True,
@@ -328,7 +329,7 @@ class EditJobScreen(Screen[None]):
         if not rec:
             return
 
-        def _check_select(field_id: str, label: str, value) -> None:
+        def _check_select(field_id: str, label: str, value: object) -> None:
             ok = isinstance(value, str)
             self._set_field_error(field_id, not ok, f"{label}: Required" if not ok else "")
 
@@ -339,7 +340,7 @@ class EditJobScreen(Screen[None]):
                 self._set_field_error(field_id, False)
                 return
             result = inp.validate(val)
-            if not result.is_valid:
+            if result is not None and not result.is_valid:
                 self._set_field_error(field_id, True, f"{label}: {result.failures[0].description}")
             else:
                 self._set_field_error(field_id, False)
@@ -402,12 +403,12 @@ class SearchGridDemoScreen(Screen[None]):
 
     def __init__(self) -> None:
         super().__init__()
-        self._filtered:       list[dict]  = []
-        self._last_edited_id: str | None  = None
-        self._page_size:      int         = _DEFAULT_PAGE_SIZE
-        self._sort_key:       str | None  = None   # record field name, or None
-        self._sort_asc:       bool        = True
-        self._col_keys:       dict        = {}     # field key → ColumnKey
+        self._filtered:       list[dict[str, Any]] = []
+        self._last_edited_id: str | None           = None
+        self._page_size:      int                  = _DEFAULT_PAGE_SIZE
+        self._sort_key:       str | None           = None   # record field name, or None
+        self._sort_asc:       bool                 = True
+        self._col_keys:       dict[str, Any]       = {}     # field key → ColumnKey
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -493,8 +494,9 @@ class SearchGridDemoScreen(Screen[None]):
         """Sort self._filtered in-place by the active sort column."""
         if not self._sort_key:
             return
+        sort_key = self._sort_key  # already guarded by `if not self._sort_key` above
         self._filtered.sort(
-            key=lambda r: (r.get(self._sort_key) or "").lower(),
+            key=lambda r: (r.get(sort_key) or "").lower(),
             reverse=not self._sort_asc,
         )
 

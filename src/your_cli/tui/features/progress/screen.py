@@ -84,7 +84,7 @@ class ProgressDemoScreen(Screen[None]):
             case "btn-modal":
                 self.app.push_screen(ConfirmModal(), self._on_modal_result)
 
-    def _on_modal_result(self, confirmed: bool) -> None:
+    def _on_modal_result(self, confirmed: bool | None) -> None:
         msg = "[green]Confirmed[/green] — action would proceed." if confirmed else "[dim]Cancelled.[/dim]"
         self.query_one("#modal-result", Static).update(msg)
 
