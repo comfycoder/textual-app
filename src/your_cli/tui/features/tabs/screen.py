@@ -5,7 +5,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Vertical
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import (
     Button,
     ContentSwitcher,
@@ -60,9 +60,8 @@ _STATIC_TABS = list(_PANELS.keys())[:4]
 _dynamic_counter = 0
 
 
-class TabsDemoScreen(Screen[None]):
+class TabsDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -127,5 +126,3 @@ class TabsDemoScreen(Screen[None]):
             label = f"[dim]{_dynamic_counter} dynamic tab(s) added[/dim]" if _dynamic_counter else ""
             self.query_one("#tabs-dyn-label", Static).update(label)
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

@@ -5,7 +5,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, ScrollableContainer, Vertical
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from typing import Literal
 
 from textual.widgets import Footer, Header, Label, Rule, Static
@@ -15,9 +15,8 @@ _H_STYLES: list[_LineStyle] = ["solid", "heavy", "double", "dashed", "ascii"]
 _V_STYLES: list[_LineStyle] = ["solid", "heavy", "double", "dashed", "ascii"]
 
 
-class RuleDemoScreen(Screen[None]):
+class RuleDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -56,5 +55,3 @@ class RuleDemoScreen(Screen[None]):
                 yield Static("[dim]jhu[/dim]", classes="rule-field")
         yield Footer()
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

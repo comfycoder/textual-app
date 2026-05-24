@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Architecture review — textual-app</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+  </script>
+  <style>
+    .seam-line { stroke: #64748b; stroke-dasharray: 5 4; stroke-width: 1.5; }
+    .leak-line { stroke: #dc2626; stroke-width: 2; }
+    .deep-box  { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%); }
+    .arrow     { marker-end: url(#arrowhead); }
+    .arrow-red { marker-end: url(#arrowhead-red); }
+    .mermaid svg { max-width: 100%; }
+    body { font-feature-settings: "kern" 1; }
+  </style>
+</head>
+<body class="bg-stone-50 text-slate-900 font-sans">
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+      </marker>
+      <marker id="arrowhead-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#dc2626"/>
+      </marker>
+      <marker id="arrowhead-white" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/>
+      </marker>
+    </defs>
+  </svg>
+
+  <main class="max-w-5xl mx-auto px-6 py-12 space-y-12">
+
+    <!-- ── Header ─────────────────────────────────────────────────────────── -->
+    <header class="border-b border-slate-200 pb-8">
+      <p class="text-xs uppercase tracking-widest text-slate-400 mb-2">Architecture Review</p>
+      <h1 class="text-3xl font-bold text-slate-900">textual-app</h1>
+      <p class="text-slate-500 mt-1">2026-05-24 · 41 demos · 114 source files</p>
+      <div class="mt-6 flex flex-wrap gap-6 text-xs text-slate-500">
+        <span class="flex items-center gap-2"><span class="inline-block w-8 h-4 border-2 border-slate-400 rounded"></span> module</span>
+        <span class="flex items-center gap-2"><svg width="32" height="4"><line x1="0" y1="2" x2="32" y2="2" class="seam-line"/></svg> seam</span>
+        <span class="flex items-center gap-2"><svg width="32" height="4"><line x1="0" y1="2" x2="28" y2="2" class="leak-line arrow"/></svg> leakage</span>
+        <span class="flex items-center gap-2"><span class="inline-block w-8 h-4 rounded" style="background:#1e3a5f"></span> deep module</span>
+      </div>
+    </header>
+
+    <!-- ── Candidates ──────────────────────────────────────────────────────── -->
+    <section id="candidates" class="space-y-14">
+
+      <!-- ── 1. FieldValidator ──────────────────────────────────────────────── -->
+      <article id="field-validator" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-7 pt-7 pb-5 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-3 mb-3">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Strong</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">locality · leverage</span>
+          </div>
+          <h2 class="text-xl font-bold">1 — Extract a <code class="font-mono text-indigo-700">FieldValidator</code> module</h2>
+        </div>
+
+        <div class="px-7 py-5">
+          <p class="font-mono text-xs text-slate-500 mb-4">
+            features/search_grid/screen.py &nbsp;·&nbsp;
+            features/search_grid/edit.py &nbsp;·&nbsp;
+            features/form_validation/screen.py
+          </p>
+
+          <!-- before/after -->
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <!-- before -->
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-400 mb-3">Before — shallow, leaking</p>
+              <div class="relative bg-slate-50 rounded-lg border border-slate-200 p-4" style="height:280px">
+                <svg width="100%" height="100%" style="position:absolute;top:0;left:0;pointer-events:none">
+                  <!-- leak arrows -->
+                  <line x1="60" y1="65"  x2="60"  y2="105" class="leak-line arrow"/>
+                  <line x1="60" y1="155" x2="60"  y2="195" class="leak-line arrow"/>
+                  <line x1="60" y1="200" x2="220" y2="65"  class="leak-line arrow" stroke-dasharray="4 3"/>
+                </svg>
+                <div class="absolute text-xs font-mono" style="top:40px;left:10px;right:10px">
+                  <div class="border-2 border-red-300 bg-red-50 rounded px-2 py-1.5 text-center">screen.py — _LABEL_MAP, _FIELD_NAMES,<br>on_input_changed, _set_field_error</div>
+                </div>
+                <div class="absolute text-xs font-mono" style="top:110px;left:10px;right:10px">
+                  <div class="border-2 border-red-300 bg-red-50 rounded px-2 py-1.5 text-center">edit.py — identical _LABEL_MAP, _FIELD_NAMES,<br>on_input_changed, _set_field_error</div>
+                </div>
+                <div class="absolute text-xs font-mono" style="top:175px;left:10px;right:60px">
+                  <div class="border-2 border-red-300 bg-red-50 rounded px-2 py-1.5 text-center">form_validation/screen.py<br>— yet another copy</div>
+                </div>
+                <div class="absolute text-xs font-mono bg-orange-100 border border-orange-300 rounded px-1.5 py-1 text-orange-800" style="bottom:12px;right:10px;font-size:10px">
+                  _SelectCurrent<br>private import<br>× 3 files
+                </div>
+              </div>
+            </div>
+            <!-- after -->
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-400 mb-3">After — deep, one seam</p>
+              <div class="relative rounded-lg p-4 deep-box" style="height:280px">
+                <svg width="100%" height="100%" style="position:absolute;top:0;left:0;pointer-events:none">
+                  <line x1="170" y1="72"  x2="170" y2="118" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrowhead-white)"/>
+                  <line x1="170" y1="72"  x2="50"  y2="118" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrowhead-white)"/>
+                  <line x1="170" y1="72"  x2="290" y2="118" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrowhead-white)"/>
+                </svg>
+                <div class="absolute text-xs font-mono border-2 border-indigo-400 bg-indigo-900 text-indigo-100 rounded px-3 py-2 text-center" style="top:20px;left:80px;right:80px">
+                  FieldValidator<br><span class="text-indigo-300 text-[10px]">set_error · clear_errors<br>validate_input · validate_select</span>
+                </div>
+                <div class="absolute text-xs font-mono border border-slate-500 text-slate-300 rounded px-2 py-1 text-center" style="top:128px;left:5px;width:90px">screen.py</div>
+                <div class="absolute text-xs font-mono border border-slate-500 text-slate-300 rounded px-2 py-1 text-center" style="top:128px;left:105px;width:75px">edit.py</div>
+                <div class="absolute text-xs font-mono border border-slate-500 text-slate-300 rounded px-2 py-1 text-center" style="top:128px;left:190px;width:90px">form_valid…</div>
+                <div class="absolute text-xs text-slate-400 border border-slate-600 rounded px-2 py-2" style="top:190px;left:20px;right:20px;font-size:10px">
+                  <span class="text-slate-500">internal only:</span>&nbsp; _SelectCurrent walk · error panel visibility · label class toggling
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-6 text-sm">
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Problem</p>
+              <p class="text-slate-600">Every form screen reimplements the same three dicts, live-validation listeners, error-panel toggle, and a fragile <code class="font-mono text-xs">_SelectCurrent</code> private import.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Solution</p>
+              <p class="text-slate-600">A <code class="font-mono text-xs">FieldValidator</code> module whose interface is <code class="font-mono text-xs">set_error / clear / validate_input / validate_select</code> — the <code class="font-mono text-xs">_SelectCurrent</code> walk lives inside it, invisible to callers.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Wins</p>
+              <ul class="text-slate-600 space-y-1 text-xs">
+                <li>✦ locality: Select styling bug fixed in one place</li>
+                <li>✦ leverage: one interface, 3+ form screens</li>
+                <li>✦ private import isolated behind the seam</li>
+                <li>✦ interface is the test surface for all form validation</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── 2. Color maps ──────────────────────────────────────────────────── -->
+      <article id="color-maps" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-7 pt-7 pb-5 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-3 mb-3">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Strong</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">locality</span>
+          </div>
+          <h2 class="text-xl font-bold">2 — Centralize status / priority color maps</h2>
+        </div>
+
+        <div class="px-7 py-5">
+          <p class="font-mono text-xs text-slate-500 mb-4">
+            search_grid/screen.py &nbsp;·&nbsp; search_grid/_data.py &nbsp;·&nbsp;
+            master_detail/screen.py &nbsp;·&nbsp; inline_edit/screen.py &nbsp;·&nbsp;
+            pagination/screen.py &nbsp;·&nbsp; multiselect/screen.py &nbsp;·&nbsp;
+            live_dashboard/screen.py
+          </p>
+
+          <!-- cross-section diagram -->
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-400 mb-3">Before — 7 identical implementations</p>
+              <div class="bg-slate-50 rounded-lg border border-slate-200 p-3 space-y-1.5">
+                <div class="text-[10px] font-mono text-slate-400 mb-1">_STATUS_COLORS = &#123;"queued":"yellow", …&#125;</div>
+                <div class="h-6 border-l-4 border-red-400 bg-red-50 rounded-r flex items-center px-2 text-xs text-red-700">search_grid/screen.py : line 35</div>
+                <div class="h-6 border-l-4 border-red-400 bg-red-50 rounded-r flex items-center px-2 text-xs text-red-700">search_grid/_data.py : line 27</div>
+                <div class="h-6 border-l-4 border-red-400 bg-red-50 rounded-r flex items-center px-2 text-xs text-red-700">master_detail/screen.py : line 15</div>
+                <div class="h-6 border-l-4 border-red-400 bg-red-50 rounded-r flex items-center px-2 text-xs text-red-700">inline_edit/screen.py : line 12</div>
+                <div class="h-6 border-l-4 border-red-400 bg-red-50 rounded-r flex items-center px-2 text-xs text-red-700">pagination/screen.py : line 13</div>
+                <div class="h-6 border-l-4 border-red-400 bg-red-50 rounded-r flex items-center px-2 text-xs text-red-700">multiselect/screen.py : line 13</div>
+                <div class="h-6 border-l-4 border-red-400 bg-red-50 rounded-r flex items-center px-2 text-xs text-red-700">live_dashboard/screen.py : line 22</div>
+              </div>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-400 mb-3">After — one import</p>
+              <div class="rounded-lg p-3 space-y-1.5 deep-box">
+                <div class="text-[10px] font-mono text-indigo-300 mb-1">tui/palette.py</div>
+                <div class="h-10 border-2 border-indigo-400 bg-indigo-900 rounded flex items-center px-3 text-xs text-indigo-100">
+                  STATUS_COLORS &nbsp;·&nbsp; PRIORITY_COLORS &nbsp;·&nbsp; <code class="font-mono">status_markup()</code>
+                </div>
+                <div class="border-t border-slate-600 pt-2 space-y-1">
+                  <div class="h-5 border-l-4 border-slate-500 bg-slate-800 rounded-r flex items-center px-2 text-[10px] text-slate-400">search_grid/ — imports</div>
+                  <div class="h-5 border-l-4 border-slate-500 bg-slate-800 rounded-r flex items-center px-2 text-[10px] text-slate-400">master_detail/ — imports</div>
+                  <div class="h-5 border-l-4 border-slate-500 bg-slate-800 rounded-r flex items-center px-2 text-[10px] text-slate-400">inline_edit/ — imports</div>
+                  <div class="h-5 border-l-4 border-slate-500 bg-slate-800 rounded-r flex items-center px-2 text-[10px] text-slate-400">5 more — import</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-6 text-sm">
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Problem</p>
+              <p class="text-slate-600">The same two dicts appear verbatim in 7 files. A design change to status colors requires 7 edits; one missed edit produces an inconsistent UI.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Solution</p>
+              <p class="text-slate-600">Move both dicts to <code class="font-mono text-xs">tui/palette.py</code>. Add a <code class="font-mono text-xs">status_markup(val)</code> helper that returns the Rich markup string — callers stop repeating the f-string pattern too.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Wins</p>
+              <ul class="text-slate-600 space-y-1 text-xs">
+                <li>✦ locality: color change is 1 file, not 7</li>
+                <li>✦ leverage: <code class="font-mono">status_markup()</code> absorbs the f-string pattern</li>
+                <li>✦ deleting each screen's copy removes ~8 lines each, no lost behaviour</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── 3. _data.py vs screen.py ──────────────────────────────────────── -->
+      <article id="data-store" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-7 pt-7 pb-5 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-3 mb-3">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Strong</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">locality · depth</span>
+          </div>
+          <h2 class="text-xl font-bold">3 — Make <code class="font-mono text-indigo-700">search_grid/_data.py</code> the single source of truth</h2>
+        </div>
+
+        <div class="px-7 py-5">
+          <p class="font-mono text-xs text-slate-500 mb-4">
+            features/search_grid/screen.py &nbsp;·&nbsp; features/search_grid/_data.py &nbsp;·&nbsp; features/search_grid/edit.py
+          </p>
+
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-400 mb-3">Before — two parallel data stores</p>
+              <div class="relative bg-slate-50 rounded-lg border border-slate-200 p-4" style="height:240px">
+                <svg width="100%" height="100%" style="position:absolute;top:0;left:0;pointer-events:none">
+                  <line x1="155" y1="90" x2="250" y2="140" class="seam-line" stroke-dasharray="none" stroke="#94a3b8"/>
+                  <line x1="155" y1="90" x2="60"  y2="140" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrowhead-red)" stroke-dasharray="4 3"/>
+                  <text x="90" y="128" font-size="9" fill="#dc2626">ignores _data.py</text>
+                </svg>
+                <div class="absolute font-mono text-xs border-2 border-slate-400 bg-white rounded px-2 py-1.5 text-center" style="top:15px;left:75px;right:75px">edit.py</div>
+                <div class="absolute font-mono text-xs border-2 border-red-300 bg-red-50 rounded px-2 py-1.5 text-center" style="top:140px;left:5px;width:100px">
+                  screen.py<br><span class="text-[10px] text-red-600">_RECORDS (own copy)</span>
+                </div>
+                <div class="absolute font-mono text-xs border-2 border-slate-300 bg-slate-100 rounded px-2 py-1.5 text-center" style="top:140px;right:5px;width:100px">
+                  _data.py<br><span class="text-[10px] text-slate-500">_RECORDS (canonical?)</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-400 mb-3">After — one import, one source</p>
+              <div class="relative rounded-lg p-4 deep-box" style="height:240px">
+                <svg width="100%" height="100%" style="position:absolute;top:0;left:0;pointer-events:none">
+                  <line x1="155" y1="100" x2="100" y2="150" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrowhead-white)"/>
+                  <line x1="155" y1="100" x2="210" y2="150" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrowhead-white)"/>
+                </svg>
+                <div class="absolute font-mono text-xs border-2 border-indigo-400 bg-indigo-900 text-indigo-100 rounded px-3 py-2 text-center" style="top:20px;left:50px;right:50px">
+                  _data.py<br><span class="text-indigo-300 text-[10px]">_RECORDS · _RECORD_BY_ID<br>option lists · color maps</span>
+                </div>
+                <div class="absolute font-mono text-xs border border-slate-500 text-slate-300 rounded px-2 py-1 text-center" style="top:155px;left:20px;width:85px">screen.py<br><span class="text-[10px]">imports</span></div>
+                <div class="absolute font-mono text-xs border border-slate-500 text-slate-300 rounded px-2 py-1 text-center" style="top:155px;right:20px;width:85px">edit.py<br><span class="text-[10px]">imports</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-6 text-sm">
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Problem</p>
+              <p class="text-slate-600"><code class="font-mono text-xs">_data.py</code> exists as "shared store" (its own docstring) but <code class="font-mono text-xs">screen.py</code> declares its own identical <code class="font-mono text-xs">_RECORDS</code> at line 43. Two sources of truth; <code class="font-mono text-xs">edit.py</code> edits <code class="font-mono text-xs">_data.py</code>'s store, not screen.py's.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Solution</p>
+              <p class="text-slate-600">Delete <code class="font-mono text-xs">screen.py</code> lines 29–80 and import everything from <code class="font-mono text-xs">_data.py</code>. The <code class="font-mono text-xs">_data.py</code> module already has the canonical records; <code class="font-mono text-xs">screen.py</code>'s copy is dead weight.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Wins</p>
+              <ul class="text-slate-600 space-y-1 text-xs">
+                <li>✦ locality: record edits always reach the grid</li>
+                <li>✦ deletes ~50 redundant lines from screen.py</li>
+                <li>✦ <code class="font-mono">_data.py</code>'s docstring becomes true</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── 4. Paginator ───────────────────────────────────────────────────── -->
+      <article id="paginator" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-7 pt-7 pb-5 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-3 mb-3">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">Worth exploring</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">leverage · depth</span>
+          </div>
+          <h2 class="text-xl font-bold">4 — Extract a <code class="font-mono text-indigo-700">Paginator</code> module</h2>
+        </div>
+
+        <div class="px-7 py-5">
+          <p class="font-mono text-xs text-slate-500 mb-4">
+            features/search_grid/screen.py (lines 550–583) &nbsp;·&nbsp;
+            features/pagination/screen.py (lines 47–94)
+          </p>
+
+          <!-- call-graph collapse diagram -->
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-400 mb-3">Before — caller knows all the maths</p>
+              <div class="bg-slate-50 rounded-lg border border-slate-200 p-3 font-mono text-[10px] text-slate-600 space-y-1">
+                <div class="font-semibold text-slate-500 mb-1">search_grid/screen.py</div>
+                <div class="ml-2 border-l-2 border-slate-300 pl-2">pages = max(1, (total + size - 1) // size)</div>
+                <div class="ml-2 border-l-2 border-slate-300 pl-2">at_first = self._page == 0</div>
+                <div class="ml-2 border-l-2 border-slate-300 pl-2">at_last  = self._page >= pages - 1</div>
+                <div class="ml-2 border-l-2 border-slate-300 pl-2">btn_prev.disabled = at_first</div>
+                <div class="ml-2 border-l-2 border-slate-300 pl-2">btn_next.disabled = at_last</div>
+                <div class="font-semibold text-slate-500 mt-2 mb-1">pagination/screen.py — same maths, different variable names</div>
+                <div class="ml-2 border-l-2 border-red-300 pl-2 text-red-600">_total_pages = (len + size - 1) // size</div>
+                <div class="ml-2 border-l-2 border-red-300 pl-2 text-red-600">_on_first_page = self._page == 0</div>
+                <div class="ml-2 border-l-2 border-red-300 pl-2 text-red-600">btn.disabled = …</div>
+              </div>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-400 mb-3">After — interface hides the maths</p>
+              <div class="rounded-lg deep-box p-3 font-mono text-[10px] space-y-1">
+                <div class="text-indigo-300 font-semibold mb-1">tui/paginator.py</div>
+                <div class="border-2 border-indigo-400 bg-indigo-900 rounded p-2 text-indigo-100">
+                  Paginator(total, page_size)<br>
+                  &nbsp;.next() / .prev() / .go(n)<br>
+                  &nbsp;.page / .total_pages<br>
+                  &nbsp;.at_first / .at_last
+                </div>
+                <div class="text-slate-400 mt-2">callers:</div>
+                <div class="text-slate-300">p = Paginator(len(results), 10)</div>
+                <div class="text-slate-300">p.next() → updates reactive</div>
+                <div class="text-slate-300">btn.disabled = p.at_last</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-6 text-sm">
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Problem</p>
+              <p class="text-slate-600">Page-ceiling arithmetic and button-disabled logic are reimplemented independently in <code class="font-mono text-xs">search_grid</code> and <code class="font-mono text-xs">pagination</code>. An off-by-one would require two fixes.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Solution</p>
+              <p class="text-slate-600">A small <code class="font-mono text-xs">Paginator</code> dataclass whose interface exposes page navigation and boundary flags. Both screens become callers; the maths concentrates.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Wins</p>
+              <ul class="text-slate-600 space-y-1 text-xs">
+                <li>✦ depth: interface is 5 attrs; maths lives inside</li>
+                <li>✦ locality: off-by-one fixed in one place</li>
+                <li>✦ <code class="font-mono">Paginator</code> is trivially unit-testable without a Textual app</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── 5. FeatureScreen base ──────────────────────────────────────────── -->
+      <article id="feature-screen" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-7 pt-7 pb-5 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-3 mb-3">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">Worth exploring</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">leverage · locality</span>
+          </div>
+          <h2 class="text-xl font-bold">5 — Introduce a <code class="font-mono text-indigo-700">FeatureScreen</code> base class</h2>
+        </div>
+
+        <div class="px-7 py-5">
+          <p class="font-mono text-xs text-slate-500 mb-4">
+            Every features/*/screen.py — 41 files each declare:<br>
+            <code>CSS_PATH = Path(__file__).parent / "styles.tcss"</code>
+            &nbsp;+&nbsp;
+            <code>Binding("escape", "action_go_back", "Back")</code>
+            &nbsp;+&nbsp;
+            <code>def action_go_back(self): self.app.pop_screen()</code>
+          </p>
+
+          <!-- mass diagram -->
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-400 mb-3">Before — 41 × identical boilerplate</p>
+              <div class="bg-slate-50 rounded-lg border border-slate-200 p-4" style="height:220px;overflow:hidden">
+                <div class="space-y-1">
+                  <div class="text-[9px] font-mono text-slate-400 mb-1">Each of 41 screen.py files:</div>
+                  <div class="h-5 bg-red-100 border border-red-300 rounded flex items-center px-2 text-[10px] text-red-700">CSS_PATH = Path(__file__).parent / "styles.tcss"</div>
+                  <div class="h-5 bg-red-100 border border-red-300 rounded flex items-center px-2 text-[10px] text-red-700">Binding("escape", "go_back", "Back")</div>
+                  <div class="h-5 bg-red-100 border border-red-300 rounded flex items-center px-2 text-[10px] text-red-700">def action_go_back(self): self.app.pop_screen()</div>
+                  <div class="h-5 bg-slate-100 border border-slate-300 rounded flex items-center px-2 text-[10px] text-slate-500">… actual screen logic …</div>
+                </div>
+                <div class="mt-3 text-xs text-slate-400">× 41 screens = 123 redundant lines</div>
+              </div>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-400 mb-3">After — inherited, invisible</p>
+              <div class="rounded-lg deep-box p-4" style="height:220px">
+                <div class="space-y-2">
+                  <div class="text-[10px] font-mono text-indigo-300 mb-1">tui/base.py</div>
+                  <div class="border-2 border-indigo-400 bg-indigo-900 rounded p-2 text-indigo-100 text-[10px] font-mono">
+                    class FeatureScreen(Screen[None]):<br>
+                    &nbsp; CSS_PATH = auto-resolved<br>
+                    &nbsp; BINDINGS = [escape → go_back]<br>
+                    &nbsp; action_go_back() → pop_screen()
+                  </div>
+                  <div class="text-[10px] font-mono text-slate-400 mt-2">Each screen:</div>
+                  <div class="h-5 bg-slate-800 border border-slate-600 rounded flex items-center px-2 text-[10px] text-slate-300">class MyScreen(FeatureScreen): …only logic…</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-6 text-sm">
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Problem</p>
+              <p class="text-slate-600">41 screens each declare the same <code class="font-mono text-xs">CSS_PATH</code>, Escape binding, and <code class="font-mono text-xs">action_go_back</code>. A screen that forgets any of them breaks silently.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Solution</p>
+              <p class="text-slate-600">A <code class="font-mono text-xs">FeatureScreen</code> base that auto-resolves <code class="font-mono text-xs">CSS_PATH</code> from the subclass's <code class="font-mono text-xs">__module__</code> and provides the back-navigation binding by default.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Wins</p>
+              <ul class="text-slate-600 space-y-1 text-xs">
+                <li>✦ leverage: 3 lines enforced for all 41 screens</li>
+                <li>✦ new screens are correct by construction</li>
+                <li>✦ deletes ~123 lines of boilerplate</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-4 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-xs text-amber-800">
+            <strong>Note:</strong> Auto-resolving CSS_PATH from <code class="font-mono">__module__</code> requires that the package layout stays stable. Screens that want a <em>different</em> CSS file would need to override the attribute explicitly — acceptable tradeoff.
+          </div>
+        </div>
+      </article>
+
+      <!-- ── 6. Navigation unification ─────────────────────────────────────── -->
+      <article id="navigation" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-7 pt-7 pb-5 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-3 mb-3">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">Speculative</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">locality</span>
+          </div>
+          <h2 class="text-xl font-bold">6 — Unify screen navigation through <code class="font-mono text-indigo-700">navigate()</code></h2>
+        </div>
+
+        <div class="px-7 py-5">
+          <p class="font-mono text-xs text-slate-500 mb-4">
+            tui/router.py &nbsp;·&nbsp; features/search_grid/screen.py (line 652) &nbsp;·&nbsp; features/dashboard/screen.py (line 72)
+          </p>
+
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-400 mb-3">Before — two navigation patterns</p>
+              <div class="bg-slate-50 rounded-lg border border-slate-200 p-3 space-y-3">
+                <div class="font-mono text-[10px] text-slate-500">
+                  <div class="text-slate-400 mb-0.5"># gallery → any demo screen</div>
+                  <div class="bg-green-50 border border-green-200 rounded px-2 py-1">navigate(self.app, "searchgrid")</div>
+                </div>
+                <div class="font-mono text-[10px] text-slate-500">
+                  <div class="text-slate-400 mb-0.5"># search_grid → edit screen</div>
+                  <div class="bg-red-50 border border-red-300 rounded px-2 py-1 text-red-700">self.app.push_screen(EditJobScreen(record_id=key))</div>
+                </div>
+                <div class="font-mono text-[10px] text-slate-500">
+                  <div class="text-slate-400 mb-0.5"># dashboard → detail screen</div>
+                  <div class="bg-red-50 border border-red-300 rounded px-2 py-1 text-red-700">self.app.push_screen(DetailScreen(item_id=…))</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-400 mb-3">After — one pattern everywhere</p>
+              <div class="rounded-lg deep-box p-3 space-y-3 font-mono text-[10px]">
+                <div class="text-slate-300">
+                  <div class="text-slate-400 mb-0.5"># gallery → any demo screen</div>
+                  <div class="bg-indigo-900 border border-indigo-500 rounded px-2 py-1 text-indigo-100">navigate(self.app, "searchgrid")</div>
+                </div>
+                <div class="text-slate-300">
+                  <div class="text-slate-400 mb-0.5"># search_grid → edit screen</div>
+                  <div class="bg-indigo-900 border border-indigo-500 rounded px-2 py-1 text-indigo-100">navigate(self.app, "editjob", record_id=key)</div>
+                </div>
+                <div class="text-slate-300">
+                  <div class="text-slate-400 mb-0.5"># dashboard → detail screen</div>
+                  <div class="bg-indigo-900 border border-indigo-500 rounded px-2 py-1 text-indigo-100">navigate(self.app, "detail", item_id=…)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-6 text-sm">
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Problem</p>
+              <p class="text-slate-600">Child screens (edit, detail) are pushed directly via <code class="font-mono text-xs">app.push_screen()</code> while sibling screens use <code class="font-mono text-xs">navigate()</code>. The seam exists in the router but not all callers cross it.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Solution</p>
+              <p class="text-slate-600">Register child screens in <code class="font-mono text-xs">routes.py</code> with their constructor kwargs as the contract. All navigation goes through <code class="font-mono text-xs">navigate()</code>; <code class="font-mono text-xs">app.push_screen()</code> is not called in feature code.</p>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-700 mb-1">Wins</p>
+              <ul class="text-slate-600 space-y-1 text-xs">
+                <li>✦ locality: all navigation logic in router.py</li>
+                <li>✦ one pattern to learn for new screen authors</li>
+                <li class="text-slate-400">⚠ only one adapter today — seam is hypothetical</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- ── Top Recommendation ──────────────────────────────────────────────── -->
+    <section id="top-recommendation">
+      <div class="rounded-xl deep-box px-8 py-7">
+        <p class="text-xs uppercase tracking-widest text-indigo-400 mb-2">Top Recommendation</p>
+        <h2 class="text-2xl font-bold text-white mb-3">Start with #2 + #3 together</h2>
+        <p class="text-slate-300 text-sm mb-4 max-w-2xl">
+          Centralizing color maps (<a href="#color-maps" class="text-indigo-300 underline">#2</a>) and making <code class="font-mono text-indigo-300">_data.py</code> the single source of truth for <code class="font-mono text-indigo-300">search_grid</code> (<a href="#data-store" class="text-indigo-300 underline">#3</a>) are both one-hour changes with zero risk and immediate locality gains. They remove dead code, make existing docstrings true, and unblock the larger refactors that follow.
+        </p>
+        <p class="text-slate-400 text-sm">
+          Then tackle <a href="#field-validator" class="text-indigo-300 underline">#1 (FieldValidator)</a> — the highest-leverage deepening. The <code class="font-mono">_SelectCurrent</code> workaround is the sharpest thorn: a private Textual import that bleeds into three screen files. Pulling it behind a seam concentrates both the fragility and any future fix.
+        </p>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

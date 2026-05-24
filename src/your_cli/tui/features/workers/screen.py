@@ -8,7 +8,7 @@ from textual import work
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, Footer, Header, ProgressBar, Static
 
 _JOBS = [
@@ -21,9 +21,8 @@ _JOBS = [
 _STEPS = 20
 
 
-class WorkersDemoScreen(Screen[None]):
+class WorkersDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     def __init__(self) -> None:
         super().__init__()

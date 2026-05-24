@@ -6,17 +6,14 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from typing import Any
 
 from textual.widgets import Button, DataTable, Footer, Header, Input, Label, Select, Static
 
-_STATUS_COLORS = {
-    "queued": "yellow", "running": "cyan", "done": "green",
-    "failed": "red",    "pending": "dim",
-}
+from your_cli.tui.palette import STATUS_COLORS
 _TENANTS  = [("JHU", "jhu"), ("UNC", "unc"), ("Mayo", "mayo")]
-_STATUSES = [(s, s) for s in _STATUS_COLORS]
+_STATUSES = [(s, s) for s in STATUS_COLORS]
 
 _DATA: list[dict[str, Any]] = [
     {"id": "wi-001", "name": "Alpha pipeline",    "tenant": "jhu",  "status": "running"},
@@ -28,11 +25,11 @@ _DATA: list[dict[str, Any]] = [
 
 
 def _markup(status: str) -> str:
-    color = _STATUS_COLORS.get(status, "white")
+    color = STATUS_COLORS.get(status, "white")
     return f"[{color}]{status}[/{color}]"
 
 
-class InlineEditDemoScreen(Screen[None]):
+class InlineEditDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
         Binding("escape", "cancel_or_back", "Back / Cancel"),

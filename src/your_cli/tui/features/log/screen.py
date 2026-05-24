@@ -7,7 +7,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, Footer, Header, Label, Log, RichLog, Static
 
 _LEVELS = ["INFO", "WARN", "ERROR", "DEBUG"]
@@ -37,10 +37,9 @@ def _fake_line(rich: bool) -> str:
     return f"{ts}  {lvl:5}  {msg}"
 
 
-class LogDemoScreen(Screen[None]):
+class LogDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
         Binding("space",  "add_line", "Add line"),
         Binding("c",      "clear",    "Clear"),
     ]
@@ -89,5 +88,3 @@ class LogDemoScreen(Screen[None]):
             case "btn-lg-clear":
                 self.action_clear()
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

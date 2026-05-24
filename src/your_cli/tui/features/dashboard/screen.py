@@ -6,20 +6,19 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import DataTable, Footer, Header, Static
 
 from your_cli.tui.features.dashboard.detail import DetailScreen
 
 
-class DashboardScreen(Screen[None]):
+class DashboardScreen(FeatureScreen):
     """Two-pane dashboard with a resizable sidebar."""
     CSS_PATH = Path(__file__).parent / "styles.tcss"
 
     BINDINGS = [
         Binding("[", "narrow_sidebar", "Narrow"),
         Binding("]", "widen_sidebar", "Widen"),
-        Binding("escape", "go_back", "Back"),
     ]
 
     sidebar_width: reactive[int] = reactive(30)
@@ -63,8 +62,6 @@ class DashboardScreen(Screen[None]):
     def action_widen_sidebar(self) -> None:
         self.sidebar_width = min(80, self.sidebar_width + 5)
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()
 
     def on_data_table_row_selected(self, event: DataTable.RowSelected) -> None:
         table = self.query_one(DataTable)

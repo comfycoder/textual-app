@@ -4,7 +4,7 @@ from pathlib import Path
 
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import (
     Collapsible,
     Footer,
@@ -16,9 +16,8 @@ from textual.widgets import (
 )
 
 
-class LayoutDemoScreen(Screen[None]):
+class LayoutDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -67,5 +66,3 @@ class LayoutDemoScreen(Screen[None]):
                 yield tree
         yield Footer()
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

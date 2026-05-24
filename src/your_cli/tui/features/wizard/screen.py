@@ -7,7 +7,7 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, Checkbox, Footer, Header, Input, Label, Select, Static
 
 _TENANTS = [("Johns Hopkins (JHU)", "jhu"), ("UNC Chapel Hill", "unc"), ("Mayo Clinic", "mayo")]
@@ -25,9 +25,8 @@ class WizardData:
     priority: str = "normal"
 
 
-class WizardDemoScreen(Screen[None]):
+class WizardDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     _step: reactive[int] = reactive(1)
 
@@ -133,5 +132,3 @@ class WizardDemoScreen(Screen[None]):
                     severity="information",
                 )
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

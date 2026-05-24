@@ -6,7 +6,7 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Footer, Header, Label, ListItem, ListView, MarkdownViewer
 
 _REPORTS: dict[str, tuple[str, str]] = {
@@ -150,10 +150,9 @@ UnknownError       13%  █████░░░░░░░░░░░░░�
 }
 
 
-class ReportDemoScreen(Screen[None]):
+class ReportDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back",        "Back"),
         Binding("[",      "narrow_sidebar", "Narrow"),
         Binding("]",      "widen_sidebar",  "Widen"),
     ]
@@ -199,5 +198,3 @@ class ReportDemoScreen(Screen[None]):
         _, content = _REPORTS[key]
         self.query_one("#report-md", MarkdownViewer).document.update(content)
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

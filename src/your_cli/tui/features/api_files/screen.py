@@ -14,7 +14,7 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, Footer, Header, RichLog, Static, Tree
 from textual.widgets.tree import TreeNode
 
@@ -90,10 +90,9 @@ def _fmt_size(n: int) -> str:
 # ── Screen ────────────────────────────────────────────────────────────────────
 
 
-class ApiFilesDemoScreen(Screen[None]):
+class ApiFilesDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
         Binding("[", "narrow_sidebar", "Narrow"),
         Binding("]", "widen_sidebar", "Widen"),
     ]
@@ -206,5 +205,3 @@ class ApiFilesDemoScreen(Screen[None]):
                 severity="information",
             )
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

@@ -6,7 +6,7 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import (
     Checkbox,
     DataTable,
@@ -25,10 +25,9 @@ from textual.widgets import (
 from your_cli.tui.themes import THEME_NAMES
 
 
-class ThemeToggleDemoScreen(Screen[None]):
+class ThemeToggleDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back",        "Back"),
         Binding("[",      "narrow_sidebar", "Narrow"),
         Binding("]",      "widen_sidebar",  "Widen"),
     ]
@@ -108,5 +107,3 @@ class ThemeToggleDemoScreen(Screen[None]):
             f"Active: [b]{self.app.theme or 'textual-dark'}[/b]"
         )
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

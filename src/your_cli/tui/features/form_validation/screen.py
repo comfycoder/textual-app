@@ -6,7 +6,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, ScrollableContainer
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, Footer, Header, Input, Label, Select, Static
 
 _TENANTS = [
@@ -16,9 +16,8 @@ _TENANTS = [
 ]
 
 
-class FormValidationDemoScreen(Screen[None]):
+class FormValidationDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     def __init__(self) -> None:
         super().__init__()
@@ -134,5 +133,3 @@ class FormValidationDemoScreen(Screen[None]):
                 ):
                     self.query_one(err_id, Static).update("")
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

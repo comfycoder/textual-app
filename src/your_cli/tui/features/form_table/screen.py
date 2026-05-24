@@ -8,7 +8,7 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, ScrollableContainer, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import (
     Button,
     DataTable,
@@ -28,8 +28,7 @@ _PRIORITY_OPTS = [("Low","low"),("Medium","medium"),("High","high"),("Critical",
 _TENANT_OPTS   = [("JHU","jhu"),("UNC","unc"),("Mayo","mayo"),("Stanford","stanford")]
 _ENV_OPTS      = [("Production","prod"),("Staging","staging"),("Development","dev")]
 
-_STATUS_COLORS = {"queued":"yellow","running":"cyan","done":"green","failed":"red","pending":"dim"}
-_PRI_COLORS    = {"low":"dim","medium":"yellow","high":"red","critical":"bold red"}
+from your_cli.tui.palette import PRI_COLORS, STATUS_COLORS
 
 random.seed(55)
 
@@ -66,10 +65,9 @@ _RECORDS = [
 ]
 
 
-class FormTableDemoScreen(Screen[None]):
+class FormTableDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
         Binding("ctrl+s", "save",    "Save"),
         Binding("ctrl+n", "new_rec", "New"),
     ]
@@ -190,8 +188,8 @@ class FormTableDemoScreen(Screen[None]):
         self._populate_form(_RECORDS[0])
 
     def _add_table_row(self, tbl: DataTable[Any], rec: dict[str, Any]) -> None:
-        sc = _STATUS_COLORS.get(rec["status"], "white")
-        pc = _PRI_COLORS.get(rec["priority"], "white")
+        sc = STATUS_COLORS.get(rec["status"], "white")
+        pc = PRI_COLORS.get(rec["priority"], "white")
         tbl.add_row(
             rec["id"], rec["tenant"], rec["type"],
             f"[{sc}]{rec['status']}[/{sc}]",
@@ -294,7 +292,7 @@ class FormTableDemoScreen(Screen[None]):
         })
 
         tbl = self.query_one("#ft-table", DataTable)
-        sc, pc = _STATUS_COLORS.get(status,"white"), _PRI_COLORS.get(pri,"white")
+        sc, pc = STATUS_COLORS.get(status,"white"), PRI_COLORS.get(pri,"white")
         rk = self._editing_id
         cols = tbl.ordered_columns
         tbl.update_cell(rk, cols[1].key, tenant)
@@ -338,5 +336,3 @@ class FormTableDemoScreen(Screen[None]):
             case "btn-ft-clear":
                 self._clear_form()
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

@@ -6,7 +6,7 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import (
     Button,
     Footer,
@@ -28,10 +28,9 @@ _CATEGORIES = [
 ]
 
 
-class SettingsDemoScreen(Screen[None]):
+class SettingsDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
         Binding("[", "narrow_sidebar", "Narrow"),
         Binding("]", "widen_sidebar",  "Widen"),
     ]
@@ -128,5 +127,3 @@ class SettingsDemoScreen(Screen[None]):
             case "btn-settings-reset":
                 self.notify("Reset to defaults.", title="Settings", severity="warning")
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

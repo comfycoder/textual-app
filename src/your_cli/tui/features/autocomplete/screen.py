@@ -5,7 +5,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import ScrollableContainer
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.suggester import SuggestFromList
 from textual.widgets import Button, Footer, Header, Input, Label, Static
 
@@ -29,10 +29,9 @@ _TAGS = [
 ]
 
 
-class AutocompleteDemoScreen(Screen[None]):
+class AutocompleteDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
         Binding("ctrl+s", "submit",  "Submit"),
     ]
 
@@ -106,5 +105,3 @@ class AutocompleteDemoScreen(Screen[None]):
                 "[dim]Fill in at least one field.[/dim]"
             )
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

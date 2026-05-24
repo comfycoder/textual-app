@@ -7,19 +7,12 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from typing import Any
 
 from textual.widgets import DataTable, Footer, Header, Static
 
-_STATUS_COLORS = {
-    "queued": "yellow", "running": "cyan", "done": "green",
-    "failed": "red",    "pending": "dim",
-}
-_STEP_STATUS_COLORS = {
-    "pending": "dim", "running": "cyan", "done": "green",
-    "failed": "red",  "skipped": "yellow",
-}
+from your_cli.tui.palette import STATUS_COLORS, STEP_STATUS_COLORS
 _TYPES   = ["training", "validation", "export", "inference", "preprocessing"]
 _TENANTS = ["jhu", "unc", "mayo"]
 _STEPS = {
@@ -36,7 +29,7 @@ def _make_jobs() -> list[dict[str, Any]]:
     jobs = []
     for i in range(1, 26):
         job_type = random.choice(_TYPES)
-        status   = random.choice(list(_STATUS_COLORS))
+        status   = random.choice(list(STATUS_COLORS))
         steps    = _STEPS[job_type]
         # Determine how many steps completed based on status
         if status == "done":
@@ -90,10 +83,9 @@ _JOBS = _make_jobs()
 _JOB_BY_ID = {j["id"]: j for j in _JOBS}
 
 
-class MasterDetailDemoScreen(Screen[None]):
+class MasterDetailDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back",       "Back"),
         Binding("[",      "narrow_master",  "Narrow"),
         Binding("]",      "widen_master",   "Widen"),
     ]
@@ -115,7 +107,7 @@ class MasterDetailDemoScreen(Screen[None]):
         master = self.query_one("#md-master-table", DataTable)
         master.add_columns("ID", "Type", "Tenant", "Status", "Duration", "Node")
         for job in _JOBS:
-            color = _STATUS_COLORS.get(job["status"], "white")
+            color = STATUS_COLORS.get(job["status"], "white")
             master.add_row(
                 job["id"],
                 job["type"],
@@ -151,7 +143,7 @@ class MasterDetailDemoScreen(Screen[None]):
         if not job:
             return
 
-        color = _STATUS_COLORS.get(job["status"], "white")
+        color = STATUS_COLORS.get(job["status"], "white")
         self.query_one("#md-detail-header", Static).update(
             f"[b]{job['id']}[/b]  ·  {job['type']}  ·  {job['tenant']}"
             f"  ·  [{color}]{job['status']}[/{color}]"
@@ -161,7 +153,7 @@ class MasterDetailDemoScreen(Screen[None]):
         detail = self.query_one("#md-detail-table", DataTable)
         detail.clear()
         for step in job["steps"]:
-            sc = _STEP_STATUS_COLORS.get(step["status"], "white")
+            sc = STEP_STATUS_COLORS.get(step["status"], "white")
             detail.add_row(
                 str(step["step"]),
                 step["name"],
@@ -170,5 +162,3 @@ class MasterDetailDemoScreen(Screen[None]):
                 f"[dim]{step['message']}[/dim]",
             )
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

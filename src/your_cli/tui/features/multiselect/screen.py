@@ -7,13 +7,10 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, DataTable, Footer, Header, Static
 
-_STATUS_COLORS = {
-    "queued": "yellow", "running": "cyan", "done": "green",
-    "failed": "red",    "pending": "dim",
-}
+from your_cli.tui.palette import STATUS_COLORS
 _TYPES   = ["training", "validation", "export", "inference", "preprocessing"]
 _TENANTS = ["jhu", "unc", "mayo"]
 
@@ -22,7 +19,7 @@ _ALL_ITEMS = [
     {
         "id":       f"wi-{i:03d}",
         "tenant":   random.choice(_TENANTS),
-        "status":   random.choice(list(_STATUS_COLORS)),
+        "status":   random.choice(list(STATUS_COLORS)),
         "type":     random.choice(_TYPES),
         "priority": random.choice(["high", "medium", "low"]),
     }
@@ -33,10 +30,9 @@ _CHECK = "[green]✓[/green]"
 _EMPTY = "[dim] [/dim]"
 
 
-class MultiSelectDemoScreen(Screen[None]):
+class MultiSelectDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back",       "Back"),
         Binding("space",  "toggle_row",    "Toggle"),
         Binding("a",      "select_all",    "All"),
         Binding("d",      "deselect_all",  "None"),
@@ -59,7 +55,7 @@ class MultiSelectDemoScreen(Screen[None]):
         table = self.query_one(DataTable)
         table.add_columns("", "ID", "Status", "Tenant", "Type", "Priority")
         for item in _ALL_ITEMS:
-            color  = _STATUS_COLORS.get(item["status"], "white")
+            color  = STATUS_COLORS.get(item["status"], "white")
             pri_color = {"high": "red", "medium": "yellow", "low": "green"}.get(item["priority"], "white")
             table.add_row(
                 _EMPTY,
@@ -131,5 +127,3 @@ class MultiSelectDemoScreen(Screen[None]):
                 )
                 self.action_deselect_all()
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

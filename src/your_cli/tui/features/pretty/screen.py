@@ -5,7 +5,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Footer, Header, Label, ListItem, ListView, Pretty, Static
 
 _OBJECTS = {
@@ -70,9 +70,8 @@ _OBJECTS = {
 }
 
 
-class PrettyDemoScreen(Screen[None]):
+class PrettyDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -109,5 +108,3 @@ class PrettyDemoScreen(Screen[None]):
             )
             self.query_one("#pp-widget", Pretty).update(obj)
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

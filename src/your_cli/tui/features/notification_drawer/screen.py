@@ -8,7 +8,7 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, Footer, Header, Label, RichLog, Static
 
 _SAMPLE_EVENTS = [
@@ -34,10 +34,9 @@ _SEV_ICON = {
 }
 
 
-class NotificationDrawerDemoScreen(Screen[None]):
+class NotificationDrawerDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back",       "Back"),
         Binding("n",      "toggle_drawer", "Drawer"),
         Binding("c",      "clear_drawer",  "Clear"),
     ]
@@ -136,5 +135,3 @@ class NotificationDrawerDemoScreen(Screen[None]):
             case "btn-nd-clear":
                 self.action_clear_drawer()
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

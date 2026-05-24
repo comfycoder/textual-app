@@ -5,7 +5,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, ScrollableContainer, Vertical
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import (
     Button,
     Checkbox,
@@ -18,9 +18,8 @@ from textual.widgets import (
 )
 
 
-class ToggleButtonDemoScreen(Screen[None]):
+class ToggleButtonDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -108,5 +107,3 @@ class ToggleButtonDemoScreen(Screen[None]):
                 self.query_one(f"#{cb_id}", Checkbox).value = defaults.get(cb_id, False)
             self.query_one("#rb-medium", RadioButton).value = True
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

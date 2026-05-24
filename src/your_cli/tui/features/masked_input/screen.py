@@ -5,7 +5,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import ScrollableContainer
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, Footer, Header, Label, MaskedInput, Static
 
 # MaskedInput template characters:
@@ -28,10 +28,9 @@ _FIELDS = [
 ]
 
 
-class MaskedInputDemoScreen(Screen[None]):
+class MaskedInputDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
         Binding("ctrl+s", "submit",  "Submit"),
     ]
 
@@ -84,5 +83,3 @@ class MaskedInputDemoScreen(Screen[None]):
                 "[red]Please fix errors above.[/red]"
             )
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

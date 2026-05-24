@@ -5,7 +5,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, ScrollableContainer, Vertical
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import (
     Button,
     Checkbox,
@@ -21,9 +21,8 @@ from textual.widgets import (
 )
 
 
-class TooltipDemoScreen(Screen[None]):
+class TooltipDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -102,5 +101,3 @@ class TooltipDemoScreen(Screen[None]):
         tbl.add_row("wi-044", "[yellow]queued[/yellow]","—")
         tbl.tooltip = "Recent jobs — press Enter on a row for details"
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

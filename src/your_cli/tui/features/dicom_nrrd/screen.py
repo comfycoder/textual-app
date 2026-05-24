@@ -5,7 +5,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, ScrollableContainer
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Footer, Header, Static
 
 from your_cli.tui.widgets import (
@@ -19,11 +19,10 @@ from your_cli.tui.widgets import (
 )
 
 
-class DicomNrrdDemoScreen(Screen[None]):
+class DicomNrrdDemoScreen(FeatureScreen):
     """DICOM → NRRD batch conversion metrics dashboard."""
     CSS_PATH = Path(__file__).parent / "styles.tcss"
 
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     # Throughput samples (series / min) over the last 24 one-minute windows
     _THROUGHPUT: list[float] = [
@@ -172,5 +171,3 @@ class DicomNrrdDemoScreen(Screen[None]):
 
         yield Footer()
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

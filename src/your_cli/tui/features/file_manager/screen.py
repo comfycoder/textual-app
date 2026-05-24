@@ -7,7 +7,7 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, DirectoryTree, Footer, Header, RichLog, Static
 
 MAX_PREVIEW_LINES = 200
@@ -21,10 +21,9 @@ def _format_size(n: int) -> str:
     return f"{n:.1f} TB"
 
 
-class FilesDemoScreen(Screen[None]):
+class FilesDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
         Binding("[", "narrow_sidebar", "Narrow"),
         Binding("]", "widen_sidebar", "Widen"),
     ]
@@ -135,5 +134,3 @@ class FilesDemoScreen(Screen[None]):
                 severity="information",
             )
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

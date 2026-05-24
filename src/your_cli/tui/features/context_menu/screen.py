@@ -7,13 +7,11 @@ from textual.binding import Binding
 from textual.containers import Vertical
 from typing import Any
 
-from textual.screen import ModalScreen, Screen
+from textual.screen import ModalScreen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import DataTable, Footer, Header, Label, ListItem, ListView, Static
 
-_STATUS_COLORS = {
-    "queued": "yellow", "running": "cyan", "done": "green",
-    "failed": "red",    "pending": "dim",
-}
+from your_cli.tui.palette import STATUS_COLORS
 _ITEMS = [
     {"id": "wi-001", "tenant": "jhu",  "status": "running", "type": "training"},
     {"id": "wi-002", "tenant": "unc",  "status": "queued",  "type": "validation"},
@@ -61,9 +59,8 @@ class ContextMenuModal(ModalScreen[str | None]):
         self.dismiss(None)
 
 
-class ContextMenuDemoScreen(Screen[None]):
+class ContextMenuDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -78,7 +75,7 @@ class ContextMenuDemoScreen(Screen[None]):
         table = self.query_one(DataTable)
         table.add_columns("ID", "Status", "Tenant", "Type")
         for item in _ITEMS:
-            color = _STATUS_COLORS.get(item["status"], "white")
+            color = STATUS_COLORS.get(item["status"], "white")
             table.add_row(
                 item["id"],
                 f"[{color}]{item['status']}[/{color}]",
@@ -106,5 +103,3 @@ class ContextMenuDemoScreen(Screen[None]):
 
         self.app.push_screen(ContextMenuModal(item), handle)
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

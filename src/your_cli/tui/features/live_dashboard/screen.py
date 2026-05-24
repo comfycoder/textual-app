@@ -14,20 +14,14 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from typing import Any
 
 from textual.widgets import Button, DataTable, Footer, Header, Label, Static
 
-REFRESH_SECONDS = 10
+from your_cli.tui.palette import STATUS_COLORS
 
-_STATUS_COLORS = {
-    "queued":  "yellow",
-    "running": "cyan",
-    "done":    "green",
-    "failed":  "red",
-    "pending": "dim",
-}
+REFRESH_SECONDS = 10
 
 _BASE_ITEMS = [
     {"id": "wi-001", "tenant": "jhu"},
@@ -42,7 +36,7 @@ async def _fake_api_fetch() -> list[dict[str, Any]]:
     """Simulated API call — replace with real httpx call."""
     await asyncio.sleep(0.4)
     now = datetime.now().strftime("%H:%M:%S")
-    statuses = list(_STATUS_COLORS.keys())
+    statuses = list(STATUS_COLORS.keys())
     return [
         {**item, "status": random.choice(statuses), "updated": now}
         for item in _BASE_ITEMS
@@ -50,14 +44,13 @@ async def _fake_api_fetch() -> list[dict[str, Any]]:
 
 
 def _markup_status(status: str) -> str:
-    color = _STATUS_COLORS.get(status, "white")
+    color = STATUS_COLORS.get(status, "white")
     return f"[{color}]{status}[/{color}]"
 
 
-class LiveDashboardScreen(Screen[None]):
+class LiveDashboardScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
         Binding("r", "manual_refresh", "Refresh"),
     ]
 
@@ -142,5 +135,3 @@ class LiveDashboardScreen(Screen[None]):
         if event.button.id == "btn-refresh":
             self.action_manual_refresh()
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

@@ -7,7 +7,8 @@ from textual import work
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
-from textual.screen import ModalScreen, Screen
+from textual.screen import ModalScreen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import (
     Button,
     Digits,
@@ -41,9 +42,8 @@ class ConfirmModal(ModalScreen[bool]):
         self.dismiss(False)
 
 
-class ProgressDemoScreen(Screen[None]):
+class ProgressDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -96,5 +96,3 @@ class ProgressDemoScreen(Screen[None]):
             await asyncio.sleep(0.04)
             bar.advance(1)
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

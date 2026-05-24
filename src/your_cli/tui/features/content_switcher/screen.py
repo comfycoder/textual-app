@@ -6,7 +6,7 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import (
     ContentSwitcher,
     Footer,
@@ -78,10 +78,9 @@ _CONTENT = {
 }
 
 
-class ContentSwitcherDemoScreen(Screen[None]):
+class ContentSwitcherDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back",      "Back"),
         Binding("1",      "show_panel_0", "Overview",       show=False),
         Binding("2",      "show_panel_1", "Jobs",           show=False),
         Binding("3",      "show_panel_2", "Infrastructure", show=False),
@@ -137,5 +136,3 @@ class ContentSwitcherDemoScreen(Screen[None]):
     def action_show_panel_3(self) -> None: self._switch_to(3)
     def action_show_panel_4(self) -> None: self._switch_to(4)
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

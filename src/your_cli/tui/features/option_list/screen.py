@@ -5,7 +5,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import (
     Footer,
     Header,
@@ -32,9 +32,8 @@ _ACTIONS = [
 ]
 
 
-class OptionListDemoScreen(Screen[None]):
+class OptionListDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -85,5 +84,3 @@ class OptionListDemoScreen(Screen[None]):
         )
         self.notify(f"Action: {label}", title="Selected")
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

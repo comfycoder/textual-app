@@ -5,7 +5,8 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Vertical
-from textual.screen import ModalScreen, Screen
+from textual.screen import ModalScreen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, Footer, Header, Input, Label, ListItem, ListView, Static
 
 _COMMANDS = [
@@ -59,10 +60,9 @@ class CommandPaletteModal(ModalScreen[str | None]):
         self.dismiss(None)
 
 
-class CommandPaletteDemoScreen(Screen[None]):
+class CommandPaletteDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
         Binding("ctrl+p", "open_palette", "Palette"),
     ]
 
@@ -88,5 +88,3 @@ class CommandPaletteDemoScreen(Screen[None]):
         if event.button.id == "btn-open-cp":
             self.action_open_palette()
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

@@ -10,7 +10,7 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal
 from textual.reactive import reactive
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, Footer, Header, RichLog, Static
 
 _LEVELS = ["DEBUG", "DEBUG", "INFO", "INFO", "INFO", "WARNING", "ERROR"]
@@ -48,10 +48,9 @@ def _make_line() -> str:
     return f"[dim]{ts}[/dim]  [{color}]{level:<7}[/{color}]  [dim]{source:<10}[/dim]  {msg}"
 
 
-class LogStreamDemoScreen(Screen[None]):
+class LogStreamDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
         Binding("c", "clear_log", "Clear"),
     ]
 

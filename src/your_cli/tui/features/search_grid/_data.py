@@ -23,16 +23,6 @@ _PRIORITY_OPTS = [("Low","low"),("Medium","medium"),
 _TENANT_OPTS   = [("JHU","jhu"),("UNC","unc"),("Mayo","mayo"),("Stanford","stanford")]
 _ENV_OPTS      = [("Production","prod"),("Staging","staging"),("Development","dev")]
 
-# ── Display colour maps ───────────────────────────────────────────────────────
-
-_STATUS_COLORS = {
-    "queued": "yellow", "running": "cyan", "done": "green",
-    "failed": "red",    "pending": "dim",
-}
-_PRI_COLORS = {
-    "low": "dim", "medium": "yellow", "high": "red", "critical": "bold red",
-}
-
 # ── Record generation ─────────────────────────────────────────────────────────
 
 _SUBMITTERS = [

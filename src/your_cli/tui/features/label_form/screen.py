@@ -5,7 +5,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, ScrollableContainer, Vertical
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, Footer, Header, Input, Label, Rule, Select, Static, Switch
 
 _TYPE_OPTS     = [("Training","training"),("Validation","validation"),("Export","export"),("Inference","inference"),("Preprocessing","preprocessing")]
@@ -15,10 +15,9 @@ _TENANT_OPTS   = [("JHU","jhu"),("UNC","unc"),("Mayo","mayo"),("Stanford","stanf
 _ENV_OPTS      = [("Production","prod"),("Staging","staging"),("Development","dev")]
 
 
-class LabelFormDemoScreen(Screen[None]):
+class LabelFormDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
         Binding("ctrl+s", "save",    "Save"),
         Binding("ctrl+n", "clear",   "Clear"),
     ]
@@ -128,7 +127,6 @@ class LabelFormDemoScreen(Screen[None]):
 
     def action_save(self)    -> None: self._save()
     def action_clear(self)   -> None: self._clear()
-    def action_go_back(self) -> None: self.app.pop_screen()
 
     # ── Save ──────────────────────────────────────────────────────
 

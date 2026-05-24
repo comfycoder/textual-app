@@ -5,7 +5,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, ScrollableContainer
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Footer, Header, Static
 
 from your_cli.tui.widgets import (
@@ -18,11 +18,10 @@ from your_cli.tui.widgets import (
 
 # ── Demo screen ───────────────────────────────────────────────────────────────
 
-class Cards2DemoScreen(Screen[None]):
+class Cards2DemoScreen(FeatureScreen):
     """Five more card patterns: timeline, pricing, sparkline, activity, comparison."""
     CSS_PATH = Path(__file__).parent / "styles.tcss"
 
-    BINDINGS = [Binding("escape", "go_back", "Back")]
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -195,5 +194,3 @@ class Cards2DemoScreen(Screen[None]):
 
         yield Footer()
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

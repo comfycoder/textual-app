@@ -5,16 +5,15 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Vertical
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Footer, Header, Static
 
 
-class DetailScreen(Screen[None]):
+class DetailScreen(FeatureScreen):
     """Full-screen detail view for a single work item."""
     CSS_PATH = Path(__file__).parent / "styles.tcss"
 
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
     ]
 
     def __init__(self, item_id: str, status: str, tenant: str, updated: str) -> None:
@@ -33,5 +32,3 @@ class DetailScreen(Screen[None]):
             yield Static(f"[dim]Updated[/dim]  {self._updated}", classes="detail-field")
         yield Footer()
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

@@ -5,16 +5,15 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import ScrollableContainer
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import DataTable, Footer, Header, Static
 
 from your_cli.tui.features.help_keys.modal import HelpModal
 
 
-class HelpKeysDemoScreen(Screen[None]):
+class HelpKeysDemoScreen(FeatureScreen):
     CSS_PATH = Path(__file__).parent / "styles.tcss"
     BINDINGS = [
-        Binding("escape",   "go_back",       "Back"),
         Binding("?",        "show_help",     "Help"),
         Binding("r",        "refresh",       "Refresh data"),
         Binding("f",        "toggle_filter", "Toggle filter"),
@@ -85,5 +84,3 @@ class HelpKeysDemoScreen(Screen[None]):
     def action_hard_refresh(self) -> None:
         self.notify("Hard refresh triggered", title="Hard Refresh")
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()

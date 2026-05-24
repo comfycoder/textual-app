@@ -5,7 +5,7 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, ScrollableContainer, Vertical
-from textual.screen import Screen
+from your_cli.tui.feature_screen import FeatureScreen
 from textual.validation import Integer, Length, Regex
 from textual.widgets import (
     Button,
@@ -18,8 +18,6 @@ from textual.widgets import (
     Static,
     Switch,
 )
-from textual.widgets._select import SelectCurrent as _SelectCurrent  # internal
-
 from your_cli.tui.features.search_grid._data import (
     _ENV_OPTS,
     _PRIORITY_OPTS,
@@ -27,15 +25,15 @@ from your_cli.tui.features.search_grid._data import (
     _STATUS_OPTS,
     _TYPE_OPTS,
 )
+from your_cli.tui.widgets.field_validator import clear_all_select_errors, set_field_error
 
 
-class EditJobScreen(Screen[None]):
+class EditJobScreen(FeatureScreen):
     """Label-form editor for a single record; Ctrl+S saves and pops back."""
 
     CSS_PATH = Path(__file__).parent / "styles.tcss"
 
     BINDINGS = [
-        Binding("escape", "go_back", "Back"),
         Binding("ctrl+s", "save",    "Save"),
     ]
 
@@ -213,22 +211,11 @@ class EditJobScreen(Screen[None]):
         lbl    = self.query_one(f"#{lbl_id}", Label)
         widget = self.query_one(f"#{field_id}")
         if has_error:
-            lbl.add_class("field-error-label")
-            widget.add_class("field-error")
             self._field_errors[field_id] = message
         else:
-            lbl.remove_class("field-error-label")
-            widget.remove_class("field-error")
             self._field_errors.pop(field_id, None)
-        # For Select widgets the visible surface is the inner SelectCurrent child.
-        # CSS class rules on SelectCurrent lose to DEFAULT_CSS; walk children
-        # directly with isinstance — always reliable.
-        if isinstance(widget, Select):
-            err = (self.app.get_css_variables().get("error", "#ba3c5b")
-                   if has_error else None)
-            for child in widget.children:
-                if isinstance(child, _SelectCurrent):
-                    child.styles.background = f"{err} 15%" if has_error else None
+        error_hex = self.app.get_css_variables().get("error", "#ba3c5b")
+        set_field_error(lbl, widget, has_error, error_hex=error_hex)
         self._refresh_error_panel()
 
     def _refresh_error_panel(self) -> None:
@@ -247,10 +234,7 @@ class EditJobScreen(Screen[None]):
             w.remove_class("field-error-label")
         for w in self.query(".field-error"):
             w.remove_class("field-error")
-        for sel in self.query_one("#ej-form").query(Select):
-            for child in sel.children:
-                if isinstance(child, _SelectCurrent):
-                    child.styles.background = None
+        clear_all_select_errors(self.query_one("#ej-form"))
         self.query_one("#ej-errors").display = False
 
     def on_input_changed(self, event: Input.Changed) -> None:
@@ -347,5 +331,3 @@ class EditJobScreen(Screen[None]):
         self.notify(f"{self._record_id} saved", title="Saved", severity="information")
         self.app.pop_screen()
 
-    def action_go_back(self) -> None:
-        self.app.pop_screen()
