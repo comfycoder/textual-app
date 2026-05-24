@@ -1,10 +1,84 @@
-# Claude Development Rules
+# CLAUDE.md
 
-This file captures hard-won lessons from building this project. Follow these rules to avoid repeating known bugs.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+A Textual TUI for the AIQ platform. The app opens a **Widget Gallery** — 44 runnable demos covering nearly every Textual widget and pattern — plus the main work-items dashboard.
+
+---
+
+## Commands
+
+```bash
+# Environment setup (Conda)
+conda env create -f environment.yml       # First time
+conda env update -f environment.yml --prune  # Update
+
+# Run the app
+your-cli                                  # Launch TUI
+textual run --dev src/your_cli/__main__.py  # Hot-reload (run textual console in second terminal)
+
+# Lint / type-check / test
+ruff check .                              # Linter (100-char line limit, py312)
+mypy src                                  # Type checking (strict; generated client excluded)
+pytest                                    # Run tests
+
+# Regenerate API client (do not hand-edit src/your_cli/client/)
+./scripts/regen-client.sh
+```
+
+---
+
+## Architecture
+
+**Entry flow:** `your-cli` CLI (Typer) → `src/your_cli/cli.py::run()` → loads Pydantic `Settings` → instantiates `YourCliApp` → pushes `GalleryScreen`.
+
+**Source layout:**
+- `src/your_cli/cli.py` — CLI entry point; also handles `login`/`logout` subcommands
+- `src/your_cli/config.py` — Pydantic `Settings`; env prefix `AIQ_`, optional `.env` via `--config`
+- `src/your_cli/tui/app.py` — Root `YourCliApp`; registers 7 themes on mount; global bindings `q` (quit), `d` (dark toggle)
+- `src/your_cli/tui/themes.py` — 7 themes (AIQ, AIQ_DARK, Nord, Gruvbox, Dracula, Solarized Light, Warm Linen)
+- `src/your_cli/tui/styles.tcss` — Global Textual CSS
+- `src/your_cli/tui/screens/` — 44 screen files (gallery, dashboard, detail, 40 demo_*.py files)
+- `src/your_cli/client/` — Auto-generated OpenAPI client; never hand-edit
+
+**Screen navigation:** `app.push_screen()` / `app.pop_screen()`; Escape triggers `action_go_back()` in each demo screen. `GalleryScreen` is the hub: its ListView dynamically imports and opens demo screens on Enter.
+
+**Most complete demo:** `demo_search_grid.py` — filter bar + pageable DataTable + sortable columns + full edit form with validation; good reference for complex screen patterns.
+
+---
+
+## Configuration
+
+Settings priority (highest first): CLI flags → `AIQ_*` env vars → `.env` file (`--config path`) → defaults in `src/your_cli/config.py`.
+
+Key env vars:
+```
+AIQ_API_BASE_URL=https://api.aiq.example.com
+AIQ_TENANT_ID=00000000-0000-0000-0000-000000000000
+AIQ_CLIENT_ID=00000000-0000-0000-0000-000000000000
+```
+
+---
+
+## Adding a new demo screen
+
+Three touch-points are required every time:
+
+1. **Create** `src/your_cli/tui/screens/demo_<key>.py` with a `Screen[None]` subclass and `BINDINGS = [Binding("escape", "go_back", "Back")]`.
+2. **Register** in `GalleryScreen.DEMOS` (`gallery.py`) — add a `("Display Name", "<key>", "description")` tuple.
+3. **Wire** in `GalleryScreen._open_demo()` (`gallery.py`) — add the import and map `"<key>": YourScreenClass` in the `screens` dict.
+
+---
+
+## Windows requirement
+
+Requires **Windows Terminal** (default on Windows 11). Legacy `cmd.exe` and PowerShell 5.1 in `conhost` are not supported.
 
 ---
 
 ## Textual-specific rules
+
+This section captures hard-won lessons specific to **Textual 8.x**. Check before writing any new screen or widget code.
 
 ### Select widget — clearing a selection
 
@@ -194,6 +268,106 @@ Key facts about `widget.styles.background`:
 **Rule:** Do not set `padding` on a `DataTable` widget.
 
 **Why:** Padding clips the DataTable's internal scroll viewport, making rows below the padding boundary unreachable by keyboard navigation.
+
+---
+
+### Static next to Buttons — vertical text alignment
+
+**Rule:** A `Static` placed alongside `Button` widgets in a `Horizontal` bar will have its text at the top, not centred, even when the parent has `align: left middle`. Give the Static `height: 3` (matching Button's height) and `content-align: left middle` so the text sits on the same visual line as the button labels.
+
+**Why:** Buttons have `min-height: 3` and `border: tall` so they always occupy 3 rows. `align: left middle` on the parent positions the child widget's *box*, but if the Static's box is only 1 row tall (auto height) the text is already at the top — there is nothing to centre.
+
+```css
+/* ✗ Wrong — text sits at the top of the bar */
+#my-label { width: auto; padding: 0 2; }
+
+/* ✓ Correct — text sits on the same row as button text */
+#my-label { width: auto; height: 3; padding: 0 2; content-align: left middle; }
+```
+
+---
+
+### Static replacing an Input — matching position and height
+
+**Rule:** When displaying a read-only value in place of an `Input` widget, give the Static `height: 3; padding: 1 0 1 3` to match the Input's dimensions exactly.
+
+**Why:** `Input` has `height: 3`, `border: tall` (1 cell each side), and `padding: 0 2`, so its text starts 3 cells from the widget's left edge (1 border + 2 padding) and sits on row 1 of 3. Without the matching padding the read-only text appears misaligned both vertically and horizontally relative to the other form fields.
+
+```css
+.my-readonly-display {
+    height: 3;
+    padding: 1 0 1 3;   /* top:1 matches border-top, left:3 matches border+padding */
+}
+```
+
+---
+
+### DataTable — sortable columns
+
+**Rule:** Use `add_column(label, key=key)` (not `add_columns`) and store the returned `ColumnKey` objects. Handle `DataTable.HeaderSelected` to detect clicks; read the clicked key with `event.column_key.value`.
+
+**Why:** `add_columns` returns keys but gives no per-column control. Storing keys lets you look up `tbl.columns[ck]` to update labels later.
+
+```python
+# Store keys at mount time
+self._col_keys = {key: tbl.add_column(label, key=key) for label, key in _COLUMNS}
+
+# Sort handler
+def on_data_table_header_selected(self, event: DataTable.HeaderSelected) -> None:
+    col_key = event.column_key.value   # the string you passed to add_column
+    ...
+```
+
+---
+
+### DataTable — updating column labels (sort indicators)
+
+**Rule:** After changing `column.label`, check whether the new label is wider than `column.content_width`. If so, bump `content_width` manually and set `tbl._require_update_dimensions = True`, then call `tbl.refresh()`.
+
+**Why:** Auto-width columns (`auto_width=True`, the default) size themselves to `content_width`, which is set at creation and updated only when cells are added. Changing the label text alone does not widen the column — the indicator character gets silently clipped.
+
+```python
+from rich.text import Text
+
+def _update_column_headers(self) -> None:
+    tbl = self.query_one("#my-table", DataTable)
+    changed = False
+    for label, key in _COLUMNS:
+        col = tbl.columns[self._col_keys[key]]
+        new_label = Text(label + indicator)
+        col.label = new_label
+        w = len(label + indicator)
+        if w > col.content_width:
+            col.content_width = w
+            changed = True
+    if changed:
+        tbl._require_update_dimensions = True
+    tbl.refresh()
+```
+
+---
+
+### DataTable — multi-line rows and wrapping
+
+**Rule:** Pass `height=None` to `add_row` for automatic row height. For cell content to actually *wrap*, the column must have a **fixed width** set via `add_column(label, key=key, width=N)`. Auto-width columns always expand to fit content on one line and never wrap regardless of row height.
+
+```python
+# Fixed width on columns that should wrap
+tbl.add_column("Tags", key="tags", width=22)
+
+# Auto height — Textual measures the content and sets the minimum lines needed
+tbl.add_row(..., height=None)
+```
+
+---
+
+### DataTable — zebra striping
+
+**Rule:** Pass `zebra_stripes=True` to the `DataTable` constructor. No CSS needed — Textual applies `.datatable--even-row` / `.datatable--odd-row` automatically and the colours are theme-driven.
+
+```python
+yield DataTable(id="my-table", cursor_type="row", zebra_stripes=True)
+```
 
 ---
 

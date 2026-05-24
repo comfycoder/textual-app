@@ -57,6 +57,9 @@ class GalleryScreen(Screen[None]):
         ("Form + Table",               "formtable",            "Selecting a row in the grid populates the edit form above it"),
         ("Label Form",                 "labelform",            "Each field on its own line — label on the left, input on the right"),
         ("Search → Grid → Edit",       "searchgrid",           "Filter bar, pageable results grid, row opens a full edit form"),
+        ("Card Patterns",              "cards",                "Alert, Profile, Progress, Action, and Key-Value cards built with compose()"),
+        ("Card Patterns II",           "cards2",               "Timeline, Pricing, Sparkline, Activity, and Comparison cards"),
+        ("DICOM → NRRD",               "dicomnrrd",            "Batch conversion dashboard: progress, volume metadata, validation alerts, activity log"),
     ]
 
     sidebar_width: reactive[int] = reactive(30)
@@ -151,6 +154,9 @@ class GalleryScreen(Screen[None]):
         from your_cli.tui.screens.demo_form_table import FormTableDemoScreen
         from your_cli.tui.screens.demo_label_form import LabelFormDemoScreen
         from your_cli.tui.screens.demo_search_grid import SearchGridDemoScreen
+        from your_cli.tui.screens.demo_cards import CardsDemoScreen
+        from your_cli.tui.screens.demo_cards2 import Cards2DemoScreen
+        from your_cli.tui.screens.demo_dicom_nrrd import DicomNrrdDemoScreen
 
         screens = {
             "inputs":       InputsDemoScreen,
@@ -194,6 +200,9 @@ class GalleryScreen(Screen[None]):
             "formtable":            FormTableDemoScreen,
             "labelform":            LabelFormDemoScreen,
             "searchgrid":           SearchGridDemoScreen,
+            "cards":                CardsDemoScreen,
+            "cards2":               Cards2DemoScreen,
+            "dicomnrrd":            DicomNrrdDemoScreen,
         }
         if key in screens:
             self.app.push_screen(screens[key]())
