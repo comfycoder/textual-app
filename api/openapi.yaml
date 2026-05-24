@@ -1,0 +1,21 @@
+# Replace this with your real OpenAPI 3.x spec.
+# A minimal stub is included so `./scripts/regen-client.sh` runs end-to-end.
+openapi: 3.0.3
+info:
+  title: AIQ API (stub)
+  version: 0.1.0
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Liveness probe.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string

@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "your-cli"
+version = "0.1.0"
+description = "TUI for the AIQ platform."
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "Dennis" }]
+dependencies = [
+    "textual>=8.2.7",
+    "typer>=0.25.1",
+    "httpx>=0.28.1",
+    "pydantic>=2.13.4",
+    "pydantic-settings>=2.14.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "openapi-python-client>=0.28.4",
+    "textual-dev>=1.8.0",
+    "ruff>=0.15.14",
+    "mypy>=2.1.0",
+    "pytest>=9.0.3",
+    "pytest-asyncio>=1.3.0",
+]
+
+[project.scripts]
+your-cli = "your_cli.cli:run"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
+# The generated OpenAPI client lives under your_cli.client; relax there.
+[[tool.mypy.overrides]]
+module = "your_cli.client.*"
+ignore_errors = true
+
+[tool.setuptools.package-data]
+your_cli = ["*.tcss", "**/*.tcss"]

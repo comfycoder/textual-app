@@ -1,0 +1,13 @@
+Help on function __init__ in module textual.widgets._selection_list:
+
+__init__(self, *selections: 'Selection[SelectionType] | tuple[ContentText, SelectionType] | tuple[ContentText, SelectionType, bool]', name: 'str | None' = None, id: 'str | None' = None, classes: 'str | None' = None, disabled: 'bool' = False, compact: 'bool' = False)
+    Initialise the selection list.
+
+    Args:
+        *selections: The content for the selection list.
+        name: The name of the selection list.
+        id: The ID of the selection list in the DOM.
+        classes: The CSS classes of the selection list.
+        disabled: Whether the selection list is disabled or not.
+        compact: Enable a compact style?
+

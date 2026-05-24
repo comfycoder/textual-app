@@ -1,0 +1,1434 @@
+/* ── Global ─────────────────────────────────────────────────── */
+
+Screen {
+    layout: vertical;
+    background: $background;
+}
+
+/* ── Widget overrides ───────────────────────────────────────── */
+
+Switch.-on {
+    background: $primary;
+}
+
+Switch.-on > .switch--slider {
+    color: $primary-lighten-3;
+}
+
+/* ── Dashboard ──────────────────────────────────────────────── */
+
+#sidebar {
+    width: 30%;
+    min-width: 28;
+    padding: 1 2;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#main {
+    width: 1fr;
+    padding: 1 2;
+    background: $surface;
+}
+
+.panel-title {
+    margin-bottom: 1;
+    color: $accent;
+}
+
+DataTable {
+    height: 1fr;
+}
+
+/* ── Detail screen ──────────────────────────────────────────── */
+
+#detail-body {
+    padding: 2 4;
+    background: $surface;
+}
+
+.detail-field {
+    margin-top: 1;
+}
+
+/* ── Gallery ────────────────────────────────────────────────── */
+
+#gallery-body {
+    height: 1fr;
+}
+
+#gallery-list {
+    min-width: 20;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#gallery-detail {
+    width: 1fr;
+    padding: 2 4;
+    background: $surface;
+}
+
+#gallery-title {
+    color: $accent;
+    margin-bottom: 1;
+}
+
+#gallery-hint {
+    color: $text-muted;
+}
+
+#gallery-desc {
+    margin-top: 1;
+}
+
+/* ── Shared demo styles ─────────────────────────────────────── */
+
+.demo-label {
+    margin-top: 2;
+    margin-bottom: 1;
+    color: $accent;
+}
+
+.demo-row {
+    height: auto;
+    margin-bottom: 1;
+    align: left middle;
+}
+
+/* ── Inputs demo ────────────────────────────────────────────── */
+
+#inputs-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+/* ── Data demo ──────────────────────────────────────────────── */
+
+TabbedContent {
+    height: 1fr;
+}
+
+TabPane {
+    height: 1fr;
+    padding: 1 2;
+    background: $surface;
+}
+
+/* ── Layout demo — Grid ─────────────────────────────────────── */
+
+#demo-grid {
+    layout: grid;
+    grid-size: 3 2;
+    grid-gutter: 1 2;
+    height: 1fr;
+    padding: 1;
+}
+
+.grid-cell {
+    background: $boost;
+    border: solid $primary;
+    padding: 1 2;
+    content-align: center middle;
+}
+
+/* ── Progress demo ──────────────────────────────────────────── */
+
+#progress-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+#demo-sparkline {
+    height: 8;
+    margin-bottom: 1;
+}
+
+#demo-loader {
+    width: 6;
+    height: 1;
+}
+
+/* ── File manager demo ──────────────────────────────────────── */
+
+#files-body {
+    height: 1fr;
+}
+
+#file-tree {
+    min-width: 20;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#file-preview {
+    width: 1fr;
+    padding: 0 1;
+    background: $surface;
+}
+
+#file-content {
+    height: 1fr;
+}
+
+#path-bar {
+    height: auto;
+    padding: 1 0;
+    background: $panel;
+    border-top: solid $primary;
+    align: left middle;
+}
+
+#selected-path {
+    width: 1fr;
+    color: $text-muted;
+}
+
+/* ── API file browser demo ──────────────────────────────────── */
+
+#api-files-body {
+    height: 1fr;
+}
+
+#api-tree {
+    min-width: 20;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#api-detail {
+    width: 1fr;
+    padding: 0 1;
+    background: $surface;
+}
+
+#api-content {
+    height: 1fr;
+}
+
+#api-path-bar {
+    height: auto;
+    padding: 1 0;
+    background: $panel;
+    border-top: solid $primary;
+    align: left middle;
+}
+
+#api-selected-path {
+    width: 1fr;
+    color: $text-muted;
+}
+
+/* ── Command palette ────────────────────────────────────────── */
+
+CommandPaletteModal {
+    align: center middle;
+}
+
+#cp-modal-body {
+    width: 60;
+    height: auto;
+    padding: 1 2;
+    border: solid $primary;
+    background: $surface;
+}
+
+#cp-list {
+    height: 15;
+    margin-top: 1;
+}
+
+#cp-hint {
+    height: auto;
+    padding: 2 4;
+    color: $text-muted;
+    background: $surface;
+}
+
+/* ── Log stream ─────────────────────────────────────────────── */
+
+#log-controls {
+    height: auto;
+    padding: 0 1;
+    background: $panel;
+    border-bottom: solid $primary;
+    align: left middle;
+}
+
+#log-output {
+    height: 1fr;
+}
+
+/* ── Wizard ─────────────────────────────────────────────────── */
+
+#wizard-body {
+    padding: 2 4;
+    height: 1fr;
+    background: $surface;
+}
+
+.wizard-step {
+    height: auto;
+}
+
+.wizard-title {
+    margin-bottom: 1;
+    color: $accent;
+}
+
+#wizard-step-label {
+    margin-bottom: 1;
+    color: $text-muted;
+}
+
+#wizard-nav {
+    height: auto;
+    margin-top: 2;
+}
+
+/* ── Report ─────────────────────────────────────────────────── */
+
+#report-body {
+    height: 1fr;
+}
+
+#report-list {
+    min-width: 24;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#report-content {
+    width: 1fr;
+    padding: 1 2;
+    height: 1fr;
+    background: $surface;
+}
+
+#report-md {
+    height: 1fr;
+}
+
+/* ── Live dashboard ─────────────────────────────────────────── */
+
+#live-status-bar {
+    height: auto;
+    padding: 0 1;
+    background: $panel;
+    border-bottom: solid $primary;
+    align: left middle;
+}
+
+.refresh-btn {
+    margin-left: 1;
+}
+
+/* ── Search & filter ────────────────────────────────────────── */
+
+#search-body {
+    height: 1fr;
+    padding: 0 1;
+    background: $surface;
+}
+
+#search-count {
+    height: auto;
+    padding: 0 1;
+    margin-bottom: 1;
+    color: $text-muted;
+}
+
+/* ── Settings ───────────────────────────────────────────────── */
+
+#settings-body {
+    height: 1fr;
+}
+
+#settings-list {
+    min-width: 18;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#settings-content {
+    width: 1fr;
+    padding: 1 2;
+    height: 1fr;
+    background: $surface;
+}
+
+.settings-pane {
+    height: auto;
+}
+
+#settings-actions {
+    height: auto;
+    margin-top: 2;
+    align: left middle;
+}
+
+/* ── Concurrent workers ─────────────────────────────────────── */
+
+#workers-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+.worker-row {
+    height: 3;
+    margin-bottom: 1;
+    padding: 0 1;
+    background: $boost;
+    border: solid $panel;
+    align: left middle;
+}
+
+.worker-name {
+    width: 22;
+}
+
+.worker-row ProgressBar {
+    width: 1fr;
+    margin: 0 1;
+}
+
+.worker-status {
+    width: 12;
+}
+
+.worker-btn {
+    min-width: 9;
+    margin-left: 1;
+}
+
+#workers-global {
+    height: auto;
+    margin-top: 2;
+    padding-top: 1;
+    border-top: solid $panel;
+    align: left middle;
+}
+
+/* ── Context menu ───────────────────────────────────────────── */
+
+ContextMenuModal {
+    align: center middle;
+}
+
+#ctx-modal-body {
+    width: 44;
+    height: auto;
+    padding: 1 2;
+    border: solid $primary;
+    background: $surface;
+}
+
+#ctx-title {
+    margin-bottom: 1;
+    padding-bottom: 1;
+    color: $accent;
+    border-bottom: solid $primary;
+}
+
+#ctx-list {
+    height: auto;
+}
+
+#ctx-hint {
+    height: auto;
+    padding: 0 1;
+    margin-bottom: 1;
+    color: $text-muted;
+}
+
+/* ── Inline edit ────────────────────────────────────────────── */
+
+#edit-hint {
+    height: auto;
+    padding: 0 1;
+    margin-bottom: 1;
+    color: $text-muted;
+}
+
+#edit-panel {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border-top: solid $primary;
+    margin-top: 1;
+}
+
+#edit-actions {
+    height: auto;
+    margin-top: 1;
+    align: left middle;
+}
+
+/* ── Theme toggle ───────────────────────────────────────────── */
+
+#theme-body {
+    height: 1fr;
+}
+
+#theme-list {
+    min-width: 20;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#theme-preview {
+    width: 1fr;
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+#theme-active-label {
+    margin-bottom: 1;
+    color: $accent;
+}
+
+/* ── Custom widgets ─────────────────────────────────────────── */
+
+#custom-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+#metric-row {
+    height: auto;
+    margin-bottom: 1;
+}
+
+#badge-row {
+    height: auto;
+    align: left middle;
+}
+
+/* ── Form validation ────────────────────────────────────────── */
+
+.field-error {
+    height: auto;
+    padding: 0 1;
+    margin-bottom: 1;
+}
+
+#vf-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+#vf-actions {
+    height: auto;
+    margin-top: 2;
+    align: left middle;
+}
+
+/* ── Pagination ─────────────────────────────────────────────── */
+
+#page-body {
+    padding: 1 2;
+    height: 1fr;
+    background: $surface;
+}
+
+#page-controls {
+    height: auto;
+    padding: 1 0;
+    align: left middle;
+    background: $panel;
+    border-top: solid $primary;
+}
+
+#page-label {
+    width: 1fr;
+    content-align: center middle;
+}
+
+/* ── Multi-select ───────────────────────────────────────────── */
+
+#ms-body {
+    padding: 1 2;
+    height: 1fr;
+    background: $surface;
+}
+
+#ms-hint {
+    height: auto;
+    padding: 0 1;
+    margin-bottom: 1;
+}
+
+#ms-actions {
+    height: auto;
+    padding: 1 0;
+    align: left middle;
+    background: $panel;
+    border-top: solid $primary;
+}
+
+#ms-count {
+    width: 1fr;
+    content-align: right middle;
+    color: $text-muted;
+    padding-right: 2;
+}
+
+/* ── Content switcher ───────────────────────────────────────── */
+
+#cs-body {
+    height: 1fr;
+}
+
+#cs-sidebar {
+    width: 25%;
+    min-width: 18;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#cs-sidebar-title {
+    padding: 1 2;
+    color: $accent;
+}
+
+#cs-nav {
+    height: 1fr;
+}
+
+#cs-switcher {
+    width: 1fr;
+    height: 1fr;
+    background: $surface;
+}
+
+.cs-panel {
+    padding: 2 4;
+    height: 1fr;
+    background: $surface;
+}
+
+/* ── Help modal ─────────────────────────────────────────────── */
+
+#help-modal-body {
+    width: 70;
+    height: auto;
+    max-height: 80%;
+    padding: 1 2;
+    border: solid $primary;
+    background: $surface;
+}
+
+#help-modal-title {
+    margin-bottom: 1;
+    color: $accent;
+}
+
+#help-table {
+    height: auto;
+    max-height: 20;
+    margin-bottom: 1;
+}
+
+#hk-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+#hk-preview {
+    height: auto;
+    max-height: 16;
+    margin-top: 1;
+}
+
+/* ── OptionList demo ─────────────────────────────────────────── */
+
+#ol-body {
+    height: 1fr;
+    background: $surface;
+}
+
+#ol-left {
+    width: 30%;
+    min-width: 26;
+    padding: 1 2;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#ol-right {
+    width: 1fr;
+    padding: 1 4;
+    background: $surface;
+}
+
+#ol-nav-hint {
+    margin-bottom: 1;
+}
+
+.ol-result {
+    margin-top: 2;
+    color: $success;
+}
+
+/* ── Masked input demo ──────────────────────────────────────── */
+
+#mi-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+/* ── Notification drawer ────────────────────────────────────── */
+
+#nd-body {
+    height: 1fr;
+    background: $surface;
+}
+
+#nd-main {
+    width: 1fr;
+    padding: 1 4;
+    background: $surface;
+}
+
+#nd-buttons {
+    height: auto;
+    margin-top: 1;
+    margin-bottom: 1;
+    align: left middle;
+}
+
+#nd-drawer {
+    width: 40%;
+    min-width: 30;
+    background: $panel;
+    border-left: solid $primary;
+}
+
+#nd-drawer-header {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border-bottom: solid $primary;
+    align: left middle;
+}
+
+#nd-drawer-title {
+    width: 1fr;
+    color: $accent;
+}
+
+.nd-close-btn {
+    min-width: 3;
+}
+
+.nd-clear-btn {
+    margin: 1 2;
+}
+
+#nd-log {
+    height: 1fr;
+    padding: 0 1;
+}
+
+/* ── Autocomplete demo ──────────────────────────────────────── */
+
+#ac-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+/* ── SelectionList demo ─────────────────────────────────────── */
+
+#sl-body {
+    height: 1fr;
+    background: $surface;
+}
+
+#sl-left {
+    width: 50%;
+    padding: 1 2;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#sl-right {
+    width: 1fr;
+    padding: 1 4;
+    background: $surface;
+}
+
+#sl-hint {
+    margin-bottom: 1;
+}
+
+/* ── Toggle button demo ─────────────────────────────────────── */
+
+#tb-body {
+    height: 1fr;
+    background: $surface;
+}
+
+#tb-left {
+    width: 55%;
+    padding: 1 2;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#tb-right {
+    width: 1fr;
+    padding: 1 4;
+    background: $surface;
+}
+
+#tb-actions {
+    height: auto;
+    margin-top: 2;
+    align: left middle;
+}
+
+/* ── Rule demo ──────────────────────────────────────────────── */
+
+#rule-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+.rule-style-label {
+    margin-top: 1;
+}
+
+#rule-v-row {
+    height: 6;
+    margin-bottom: 1;
+    align: left middle;
+}
+
+.rule-panel {
+    width: 1fr;
+    padding: 0 2;
+}
+
+#rule-form {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border: solid $primary;
+}
+
+.rule-field {
+    margin-bottom: 1;
+    color: $text-muted;
+}
+
+/* ── Tooltip demo ───────────────────────────────────────────── */
+
+#tt-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+#tt-buttons {
+    height: auto;
+    align: left middle;
+    margin-bottom: 1;
+}
+
+#tt-form {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border: solid $primary;
+    margin-bottom: 1;
+}
+
+#tt-toggles {
+    height: auto;
+    align: left middle;
+    margin-bottom: 1;
+}
+
+/* ── Pretty demo ────────────────────────────────────────────── */
+
+#pp-body {
+    height: 1fr;
+    background: $surface;
+}
+
+#pp-left {
+    width: 25%;
+    min-width: 20;
+    padding: 1 2;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#pp-right {
+    width: 1fr;
+    padding: 1 4;
+    background: $surface;
+    overflow: auto scroll;
+}
+
+#pp-widget {
+    height: auto;
+    margin-top: 1;
+}
+
+/* ── Link demo ──────────────────────────────────────────────── */
+
+#lk-body {
+    padding: 1 4;
+    height: 1fr;
+    background: $surface;
+}
+
+/* ── Log demo ───────────────────────────────────────────────── */
+
+#lg-controls {
+    height: auto;
+    padding: 0 1;
+    background: $panel;
+    border-bottom: solid $primary;
+    align: left middle;
+}
+
+#lg-body {
+    height: 1fr;
+    background: $surface;
+}
+
+#lg-left {
+    width: 1fr;
+    padding: 0 1;
+    border-right: solid $primary;
+    background: $surface;
+}
+
+#lg-right {
+    width: 1fr;
+    padding: 0 1;
+    background: $surface;
+}
+
+Log {
+    height: 1fr;
+}
+
+/* ── Tabs demo ──────────────────────────────────────────────── */
+
+#tabs-outer {
+    height: 1fr;
+    background: $surface;
+}
+
+#tabs-bar {
+    height: auto;
+}
+
+#tabs-switcher {
+    height: 1fr;
+}
+
+.tabs-panel {
+    padding: 2 4;
+    height: 1fr;
+    background: $surface;
+}
+
+#tabs-actions {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border-top: solid $primary;
+    align: left middle;
+}
+
+#tabs-dyn-label {
+    margin-left: 2;
+    color: $text-muted;
+}
+
+/* ── Master / Detail ────────────────────────────────────────── */
+
+#md-body {
+    height: 1fr;
+}
+
+#md-master {
+    width: 45%;
+    background: $panel;
+    border-right: solid $primary;
+}
+
+#md-master-title {
+    height: auto;
+    padding: 0 1;
+    background: $panel;
+    border-bottom: solid $primary;
+    color: $text-muted;
+}
+
+#md-master-table {
+    height: 1fr;
+}
+
+#md-detail {
+    width: 1fr;
+    background: $surface;
+}
+
+#md-detail-header {
+    height: auto;
+    padding: 0 1;
+    background: $boost;
+    border-bottom: solid $primary;
+}
+
+#md-detail-table {
+    height: 1fr;
+    padding: 0 1;
+}
+
+/* ── Master / Detail vertical ──────────────────────────────── */
+
+#mdv-body {
+    height: 1fr;
+}
+
+#mdv-master {
+    height: 40%;
+    background: $panel;
+    border-bottom: solid $primary;
+}
+
+#mdv-master-title {
+    height: auto;
+    padding: 0 1;
+    background: $panel;
+    border-bottom: solid $primary;
+    color: $text-muted;
+}
+
+#mdv-master-table {
+    height: 1fr;
+}
+
+#mdv-detail {
+    height: 1fr;
+    background: $surface;
+}
+
+#mdv-detail-header {
+    height: auto;
+    padding: 0 1;
+    background: $boost;
+    border-bottom: solid $primary;
+}
+
+#mdv-detail-table {
+    height: 1fr;
+}
+
+/* ── Form + Table ───────────────────────────────────────────── */
+
+#ft-body {
+    height: 1fr;
+    overflow-y: scroll;
+}
+
+#ft-form {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border-bottom: solid $primary;
+}
+
+#ft-form-title {
+    margin-bottom: 0;
+    color: $accent;
+}
+
+.ft-section {
+    height: auto;
+    margin-top: 1;
+    color: $text-muted;
+}
+
+.ft-row {
+    height: auto;
+    margin-top: 1;
+    align: left top;
+}
+
+.ft-field {
+    width: 1fr;
+    height: auto;
+    padding-right: 2;
+}
+
+.ft-field-full {
+    width: 100%;
+    margin-top: 1;
+    padding-right: 0;
+}
+
+.ft-field-toggles {
+    height: auto;
+}
+
+.ft-toggle-row {
+    height: auto;
+    margin-top: 1;
+    align: left middle;
+}
+
+.ft-toggle-label {
+    margin-left: 1;
+}
+
+.ft-id {
+    height: auto;
+    padding: 0 1;
+    color: $text-muted;
+}
+
+#ft-form-actions {
+    height: auto;
+    margin-top: 1;
+    align: left middle;
+}
+
+#ft-status-msg {
+    margin-left: 2;
+}
+
+#ft-table-area {
+    height: auto;
+    background: $surface;
+}
+
+#ft-table-hint {
+    height: auto;
+    padding: 0 1;
+    background: $boost;
+    border-bottom: solid $primary;
+}
+
+#ft-table {
+    height: 30;
+}
+
+/* ── Label Form ─────────────────────────────────────────────── */
+
+#lf-body {
+    height: 1fr;
+    overflow-y: scroll;
+}
+
+#lf-form {
+    height: auto;
+    padding: 1 4;
+    background: $panel;
+}
+
+#lf-title {
+    padding: 0 0 1 0;
+}
+
+.lf-section {
+    height: auto;
+    margin-top: 1;
+    color: $text-muted;
+}
+
+.lf-row {
+    height: auto;
+    margin-top: 0;
+    align: left top;
+}
+
+.lf-label {
+    width: 24;
+    padding: 1 2 0 0;
+    text-align: right;
+    color: $text-muted;
+}
+
+.lf-row > Input,
+.lf-row > Select {
+    width: 1fr;
+}
+
+.lf-toggle-row {
+    height: 3;
+    align: left middle;
+}
+
+.lf-toggle-row > .lf-label {
+    padding: 0 2 0 0;
+}
+
+#lf-actions {
+    height: auto;
+    padding: 1 0;
+    align: left middle;
+}
+
+#lf-msg {
+    padding: 0 2;
+}
+
+/* ── Label Form ─────────────────────────────────────────────── */
+
+#lf-body {
+    height: 1fr;
+    overflow-y: scroll;
+}
+
+#lf-form {
+    height: auto;
+    padding: 1 4;
+    background: $panel;
+}
+
+#lf-title {
+    padding: 0 0 1 0;
+}
+
+.lf-section {
+    height: auto;
+    margin-top: 1;
+    color: $text-muted;
+}
+
+.lf-row {
+    height: auto;
+    align: left top;
+}
+
+.lf-label {
+    width: 24;
+    padding: 1 2 0 0;
+    text-align: right;
+    color: $text-muted;
+}
+
+.lf-row > Input,
+.lf-row > Select {
+    width: 1fr;
+}
+
+.lf-toggle-row {
+    height: 3;
+    align: left middle;
+}
+
+.lf-toggle-row > .lf-label {
+    padding: 0 2 0 0;
+}
+
+#lf-actions {
+    height: auto;
+    padding: 1 0;
+    align: left middle;
+}
+
+#lf-msg {
+    padding: 0 2;
+}
+
+/* ── Search → Grid → Edit ───────────────────────────────────── */
+
+#sg-body {
+    height: 1fr;
+}
+
+#sg-search-panel {
+    height: auto;
+    padding: 1 2;
+    background: $panel;
+    border-bottom: solid $primary;
+}
+
+#sg-search-title {
+    padding: 0 0 1 0;
+    color: $accent;
+}
+
+.sg-filter-row {
+    height: auto;
+    align: left top;
+}
+
+.sg-filter-field {
+    width: 1fr;
+    height: auto;
+    padding-right: 2;
+}
+
+#sg-search-actions {
+    height: auto;
+    margin-top: 1;
+    align: left middle;
+}
+
+#sg-search-spacer {
+    width: 1fr;
+}
+
+#sg-result-count {
+    width: auto;
+    height: 3;
+    padding: 0 1;
+    color: $text-muted;
+    content-align: left middle;
+}
+
+#sg-per-page-label {
+    width: auto;
+    padding: 1 1 0 2;
+    color: $text-muted;
+}
+
+#sg-page-size {
+    width: 12;
+}
+
+#sg-grid-area {
+    height: 1fr;
+}
+
+#sg-table {
+    height: 1fr;
+}
+
+#sg-pagination {
+    height: auto;
+    padding: 0 2;
+    background: $panel;
+    border-top: solid $primary;
+    align: left middle;
+}
+
+#sg-page-label {
+    width: auto;
+    height: 3;
+    padding: 0 2;
+    color: $text-muted;
+    content-align: left middle;
+}
+
+/* Edit Job screen (pushed from search grid) */
+
+#ej-body {
+    height: 1fr;
+    overflow-y: scroll;
+}
+
+#ej-form {
+    height: auto;
+    padding: 1 4;
+    background: $panel;
+}
+
+#ej-title {
+    padding: 0 0 1 0;
+    color: $accent;
+}
+
+.ej-section {
+    height: auto;
+    margin-top: 1;
+    color: $text-muted;
+}
+
+.ej-row {
+    height: auto;
+    align: left top;
+}
+
+.ej-label {
+    width: 24;
+    padding: 1 2 0 0;
+    text-align: right;
+    color: $text-muted;
+}
+
+.ej-row > Input,
+.ej-row > Select {
+    width: 1fr;
+}
+
+.ej-id-display {
+    height: 3;
+    padding: 1 0 1 3;
+}
+
+.ej-toggle-row {
+    height: 3;
+    align: left middle;
+}
+
+.ej-toggle-row > .ej-label {
+    padding: 0 2 0 0;
+}
+
+/* field-error — applied to widgets and their labels when validation fails */
+Label.field-error-label {
+    color: $error;
+    text-style: bold;
+}
+
+Input.field-error {
+    background: $error 15%;
+}
+
+/* SelectCurrent error background is applied via inline style in Python
+   (widget.styles.background = None to reset) — CSS class rules don't reliably
+   override SelectCurrent DEFAULT_CSS. */
+
+#ej-errors {
+    height: auto;
+    padding: 0 1;
+    margin: 1 0;
+    border: solid $error;
+    background: $error 15%;
+}
+
+#ej-error-list {
+    height: auto;
+    padding: 1 1;
+    color: $error;
+}
+
+#ej-actions {
+    height: auto;
+    padding: 1 0;
+    align: right middle;
+}
+
+/* ── Confirm modal ──────────────────────────────────────────── */
+
+ConfirmModal {
+    align: center middle;
+}
+
+#modal-body {
+    width: 50;
+    height: auto;
+    padding: 2 4;
+    border: solid $primary;
+    background: $surface;
+}
