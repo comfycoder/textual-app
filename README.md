@@ -2,7 +2,7 @@
 
 A Textual TUI for the AIQ platform, built on [Textual](https://github.com/Textualize/textual) ≥ 8.2.7 / Python 3.12.
 
-The app launches a **Widget Gallery** — 44 runnable demos covering nearly every Textual widget and pattern, plus the main AIQ work-items dashboard.
+The app launches a **Widget Gallery** — 49 runnable demos covering nearly every Textual widget and pattern, plus the main AIQ work-items dashboard.
 
 ---
 
@@ -51,29 +51,27 @@ The gallery opens on launch. Select any item and press **Enter** to open that de
 | Demo | Key widgets / patterns |
 |------|------------------------|
 | Inputs & Forms | `Input`, `TextArea`, `Checkbox`, `Switch`, `Select`, `RadioSet`, `Button` |
-| Data Display | `DataTable`, `RichLog`, `Markdown` across three tabs |
 | Layout & Navigation | Grid layout, `Collapsible`, `Tree` |
 | Progress & Feedback | `ProgressBar`, `Digits`, `Sparkline`, `LoadingIndicator`, toast, modal |
 | Work Items Dashboard | Two-pane dashboard with row drill-down |
 | File Manager | `DirectoryTree` with file content preview |
 | API File Browser | Tree populated from API calls with lazy loading |
 | Live Dashboard | `DataTable` auto-refreshing every 10 s via `set_interval` |
-| Command Palette | Fuzzy-search overlay — Ctrl+P |
+| Command Palette | Fuzzy-search overlay — **Ctrl+P** |
 | Streaming Log | `RichLog` fed by an async worker |
-| Multi-step Wizard | Step-by-step form with Back / Next / Submit |
+| Multi-step Wizard | Step-by-step form with Back / Next / Submit and a review pane |
 | Markdown Report | Report viewer with tables, code blocks, callouts |
-| Search & Filter | Live `Input` filtering a `DataTable` |
 | Settings Screen | Category sidebar with forms |
 | Concurrent Workers | Multiple `@work` tasks with individual progress bars |
-| Context Menu | `ModalScreen` action menu on row Enter |
-| Inline Edit | Row edit panel below the table |
+| Context Menu | `ModalScreen` action menu on row **Enter** |
+| Inline Edit | Press **E** on a row to edit its fields in a panel below the table |
 | Theme Toggle | Dark / light mode switch with `app.dark` |
 | Custom Widgets | `MetricCard` and `StatusBadge` with reactive `render()` |
-| Form Validation | Inline field errors with live re-validation |
+| Form Validation | Inline field errors with live re-validation after first submit |
 | Pagination | 100 items in fixed-size pages, keyboard + button nav |
-| Multi-select Table | Space to toggle rows, bulk actions |
+| Multi-select Table | **Space** to toggle rows, **A**/**D** for all/none, bulk actions |
 | Content Switcher | `ListView` driving `ContentSwitcher` without new screens |
-| Help / Key Reference | Modal listing every active binding — press **?** |
+| Help / Key Reference | Press **?** to open a modal listing every active binding |
 | OptionList | Separators, highlight events, selected-action feedback |
 | Masked Input | Date, time, phone, job-ID, IPv4, hex-colour templates |
 | Notification Drawer | `notify()` calls accumulated in a slide-in history panel |
@@ -85,15 +83,22 @@ The gallery opens on launch. Select any item and press **Enter** to open that de
 | Pretty | Syntax-highlighted Python object display |
 | Link | Clickable links opening URLs via `app.open_url()` |
 | Log vs RichLog | Plain `Log` vs `RichLog` side by side |
-| Tabs (standalone) | `Tabs` + `ContentSwitcher` with dynamic add/remove |
-| Master / Detail | Master `DataTable` populates a child table |
-| Master / Detail (vertical) | Same pattern, stacked vertically |
+| Tabs (standalone) | `Tabs` + `ContentSwitcher` with dynamic add/remove at runtime |
+| Master / Detail | Master `DataTable` populates a child step table in real time |
 | Form + Table | Row selection populates an edit form above |
 | Label Form | Single-column form — label left, input right |
 | Search → Grid → Edit | Filter bar → pageable grid → full edit screen |
-| Card Patterns | `AlertCard`, `ProfileCard`, `ProgressCard`, `ActionCard`, `KVCard` — all via `compose()` |
+| Card Patterns | `AlertCard`, `ProfileCard`, `ProgressCard`, `ActionCard`, `KVCard` |
 | Card Patterns II | `TimelineCard`, `PricingCard`, `SparklineCard`, `ActivityCard`, `ComparisonCard` |
-| DICOM → NRRD | Batch conversion dashboard — progress, volume metadata, validation alerts, activity log |
+| Modal Dialogs | Alert, Confirm, Input, Selection, Form, and Progress modals with typed return values |
+| Work Item Cards | Status-coloured card grid — click or Enter to drill into detail |
+| DICOM → NRRD | Batch conversion dashboard — progress, metadata, validation alerts, activity log |
+| Clipboard Copy | `app.copy_to_clipboard()` — plain text, commands, JSON, and CSV with toast feedback |
+| Run History Browser | Paginated run list with date-range filter and tenant selector |
+| Reactive Attributes | `reactive` + `watch_` patterns: counter, RGB mixer, Input→reactive→fan-out |
+| Large Dataset | 5 000-row `DataTable` with virtual scrolling, column sort, `move_cursor()`, jump-to-row |
+| Reorder List | **Alt+↑/↓** keyboard reordering of a `ListView` — no native drag needed |
+| Run Dashboard | Multi-tenant 2×2 grid: `asyncio.gather()` + `Repository` + live polling |
 
 ### Search → Grid → Edit highlights
 
@@ -105,7 +110,7 @@ The most feature-rich demo (`searchgrid`) includes:
 - **Zebra striping** and **auto-height rows** (long cells wrap to a second line)
 - Record count in the pagination bar
 - Push-screen edit form with live validation, Select error highlighting, and an error summary panel
-- Ctrl+S to save; Escape to cancel; cursor restored to the last-edited row on return
+- **Ctrl+S** to save; **Escape** to cancel; cursor restored to the last-edited row on return
 
 ---
 
@@ -146,66 +151,56 @@ The generated client lands in `src/your_cli/client/` and is import-time availabl
 your-cli/
 ├── pyproject.toml               # package metadata, dependencies, entry point
 ├── environment.yml              # conda env (delegates pip install to pyproject)
-├── CLAUDE.md                    # development rules and hard-won Textual lessons
+├── CLAUDE.md                    # development rules and architecture reference
 ├── api/openapi.yaml             # OpenAPI spec (source of truth for the client)
 ├── scripts/regen-client.sh      # regenerates src/your_cli/client/
+├── docs/
+│   ├── textual-rules.md         # hard-won Textual 8.x lessons (read before writing screens)
+│   └── adr/                     # architecture decision records
+│       ├── 0001-parameterised-child-screens-bypass-router.md
+│       └── 0002-reruns-create-new-run.md
 └── src/your_cli/
     ├── __init__.py
     ├── __main__.py              # enables `python -m your_cli`
     ├── cli.py                   # Typer entry point (`your-cli` command)
-    ├── config.py                # Pydantic Settings
+    ├── config.py                # Pydantic Settings (env prefix AIQ_)
     ├── client/                  # generated OpenAPI client (do not edit)
     └── tui/
-        ├── app.py               # root Textual App (registers themes, opens Gallery)
-        ├── themes.py            # custom Textual themes
-        ├── styles.tcss          # global Textual CSS for all screens
-        └── screens/
-            ├── gallery.py             # widget gallery navigation hub
-            ├── dashboard.py           # work-items two-pane dashboard
-            ├── detail.py              # drill-down detail screen
-            ├── demo_inputs.py
-            ├── demo_data.py
-            ├── demo_layout.py
-            ├── demo_progress.py
-            ├── demo_files.py
-            ├── demo_api_files.py
-            ├── demo_live_dashboard.py
-            ├── demo_command_palette.py
-            ├── demo_log_stream.py
-            ├── demo_wizard.py
-            ├── demo_report.py
-            ├── demo_search_filter.py
-            ├── demo_settings.py
-            ├── demo_workers.py
-            ├── demo_context_menu.py
-            ├── demo_inline_edit.py
-            ├── demo_theme.py
-            ├── demo_custom_widget.py
-            ├── demo_form_validation.py
-            ├── demo_pagination.py
-            ├── demo_multiselect.py
-            ├── demo_content_switcher.py
-            ├── demo_help_keys.py
-            ├── demo_option_list.py
-            ├── demo_masked_input.py
-            ├── demo_notification_drawer.py
-            ├── demo_autocomplete.py
-            ├── demo_selection_list.py
-            ├── demo_toggle_button.py
-            ├── demo_rule.py
-            ├── demo_tooltip.py
-            ├── demo_pretty.py
-            ├── demo_link.py
-            ├── demo_log.py
-            ├── demo_tabs.py
-            ├── demo_master_detail.py
-            ├── demo_master_detail_vertical.py
-            ├── demo_form_table.py
-            ├── demo_label_form.py
-            ├── demo_search_grid.py   # most complete demo — filter/grid/edit
-            ├── demo_cards.py
-            ├── demo_cards2.py
-            └── demo_dicom_nrrd.py    # DICOM → NRRD conversion metrics dashboard
+        ├── app.py               # root YourCliApp — registers 7 themes, holds repository
+        ├── themes.py            # 7 themes: AIQ, AIQ Dark, Nord, Gruvbox, Dracula, Solarized Light, Warm Linen
+        ├── styles.tcss          # global CSS: Screen, Switch, shared .demo-* utilities
+        ├── routes.py            # single source of truth — 50 register() calls (1 hub + 49 demos)
+        ├── router.py            # navigate(app, key) — lazy-imports and push_screen
+        ├── feature_screen.py    # FeatureScreen base class — provides Escape → go_back
+        ├── paginator.py         # Paginator dataclass with slice/next/prev/first/last
+        ├── palette.py           # STATUS_COLORS, PRI_COLORS, STEP_STATUS_COLORS
+        ├── models.py            # frozen dataclasses: Run, WorkItem
+        ├── fake_api.py          # FakeApiClient — 160 deterministic runs, 50 ms latency
+        ├── repository.py        # Repository — caching gateway over ApiClient
+        ├── widgets/             # 13 reusable widgets
+        │   ├── metric.py        # MetricCard
+        │   ├── status_badge.py  # StatusBadge
+        │   ├── pagination_bar.py # PaginationBar (posts Navigated messages)
+        │   ├── field_validator.py
+        │   └── cards/           # 10 card types
+        │       ├── alert.py     # AlertCard
+        │       ├── profile.py   # ProfileCard
+        │       ├── progress.py  # ProgressCard
+        │       ├── action.py    # ActionCard
+        │       ├── kv.py        # KVCard
+        │       ├── timeline.py  # TimelineCard
+        │       ├── pricing.py   # PricingCard
+        │       ├── sparkline.py # SparklineCard
+        │       ├── activity.py  # ActivityCard
+        │       └── comparison.py # ComparisonCard
+        └── features/            # 50 packages — one per screen (or screen group)
+            ├── gallery/         # navigation hub (GalleryScreen)
+            ├── dashboard/       # two-pane dashboard; detail.py = child screen
+            ├── search_grid/     # most complete demo; edit.py + _data.py
+            ├── work_item_cards/ # card grid; detail.py = child screen
+            ├── modal_dialogs/   # typed modals; modals.py contains all ModalScreen subclasses
+            ├── large_dataset/   # 5 000-row DataTable; _data.py generates seed rows
+            └── <43 other packages, one per demo>
 ```
 
 ---
