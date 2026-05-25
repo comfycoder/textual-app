@@ -104,11 +104,11 @@ class InlineEditDemoScreen(FeatureScreen):
         item = _DATA[self._cursor_row]
         item["name"] = self.query_one("#edit-name", Input).value
         v = self.query_one("#edit-tenant", Select).value
-        if v is not Select.BLANK:
-            item["tenant"] = str(v)
+        if isinstance(v, str):
+            item["tenant"] = v
         v = self.query_one("#edit-status", Select).value
-        if v is not Select.BLANK:
-            item["status"] = str(v)
+        if isinstance(v, str):
+            item["status"] = v
         self._cancel_edit()
         self._refresh_table()
         self.notify(f"[b]{item['id']}[/b] updated.", title="Saved", severity="information")

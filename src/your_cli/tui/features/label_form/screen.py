@@ -139,7 +139,7 @@ class LabelFormDemoScreen(FeatureScreen):
         jtype  = self.query_one("#lf-type",     Select).value
         status = self.query_one("#lf-status",   Select).value
         pri    = self.query_one("#lf-priority", Select).value
-        if any(v is Select.BLANK for v in (jtype, status, pri)):
+        if not all(isinstance(v, str) for v in (jtype, status, pri)):
             self.query_one("#lf-msg", Static).update("[red]Type, Status, and Priority are required[/red]")
             return
         self.query_one("#lf-msg", Static).update(f"[green]✓  Saved: {name}[/green]")

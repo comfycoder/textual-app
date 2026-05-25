@@ -86,15 +86,15 @@ class WizardDemoScreen(FeatureScreen):
         if step == 1:
             self._data.project_name = self.query_one("#wiz-project-name", Input).value
             v = self.query_one("#wiz-tenant", Select).value
-            if v is not Select.BLANK:
-                self._data.tenant = str(v)
+            if isinstance(v, str):
+                self._data.tenant = v
         elif step == 2:
             self._data.enable_logging       = self.query_one("#wiz-logging",       Checkbox).value
             self._data.enable_validation    = self.query_one("#wiz-validation",    Checkbox).value
             self._data.enable_notifications = self.query_one("#wiz-notifications", Checkbox).value
             v = self.query_one("#wiz-priority", Select).value
-            if v is not Select.BLANK:
-                self._data.priority = str(v)
+            if isinstance(v, str):
+                self._data.priority = v
 
     def _update_summary(self) -> None:
         d = self._data

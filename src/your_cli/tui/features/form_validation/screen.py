@@ -74,7 +74,7 @@ class FormValidationDemoScreen(FeatureScreen):
         elif not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email):
             errors["vf-email"] = "Enter a valid email address"
 
-        if self.query_one("#vf-tenant", Select).value is Select.BLANK:
+        if not isinstance(self.query_one("#vf-tenant", Select).value, str):
             errors["vf-tenant"] = "Please select a tenant"
 
         jobs_str = self.query_one("#vf-jobs", Input).value.strip()

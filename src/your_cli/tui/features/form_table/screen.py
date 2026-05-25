@@ -267,7 +267,7 @@ class FormTableDemoScreen(FeatureScreen):
         pri     = self.query_one("#ft-priority",     Select).value
         env     = self.query_one("#ft-env",          Select).value
 
-        if not tenant or any(v is Select.BLANK for v in (jtype, status, pri, env)):
+        if not tenant or not all(isinstance(v, str) for v in (jtype, status, pri, env)):
             self.query_one("#ft-status-msg", Static).update("[red]Complete all required fields[/red]")
             return
 
