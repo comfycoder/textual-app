@@ -94,4 +94,5 @@ class LogStreamDemoScreen(FeatureScreen):
 
     def action_go_back(self) -> None:
         self._streaming = False
+        self.workers.cancel_all()   # stop the sleeping coroutine before pop
         super().action_go_back()

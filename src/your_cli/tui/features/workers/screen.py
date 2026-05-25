@@ -6,7 +6,6 @@ from pathlib import Path
 
 from textual import work
 from textual.app import ComposeResult
-from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import Button, Footer, Header, ProgressBar, Static
@@ -96,4 +95,5 @@ class WorkersDemoScreen(FeatureScreen):
 
     def action_go_back(self) -> None:
         self._active.clear()
+        self.workers.cancel_all()   # stop sleeping _run_job coroutines before pop
         super().action_go_back()
