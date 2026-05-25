@@ -12,6 +12,7 @@ Demonstrates:
 from __future__ import annotations
 
 import asyncio
+import random
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -32,6 +33,15 @@ _TENANTS     = ["jhu", "unc", "mayo", "stanford"]
 _LIMIT       = 5          # most-recent runs shown per tenant
 _REFRESH_SEC = 10         # auto-refresh interval
 
+# Display-only status simulation — keeps the Repository clean while making
+# the dashboard visually dynamic.  Terminal statuses (done / failed) are never
+# advanced; non-terminal ones randomly progress on each poll.
+_ADVANCE: dict[str, list[str]] = {
+    "queued":  ["queued", "running"],
+    "running": ["running", "running", "done", "failed"],
+    "pending": ["pending", "queued"],
+}
+
 # Column specs: (header, key, width)
 _COLS: list[tuple[str, str, int]] = [
     ("Run ID",    "run_id",    12),
@@ -51,6 +61,13 @@ class RunDashboardScreen(FeatureScreen):
 
     _countdown:  reactive[int]  = reactive(_REFRESH_SEC)
     _refreshing: reactive[bool] = reactive(False)
+
+    def __init__(self) -> None:
+        super().__init__()
+        # Keyed by run_id — tracks the last status shown for each run so that
+        # successive polls advance from where we left off, not from the
+        # (static) Repository value.  Terminal statuses are never overwritten.
+        self._display_statuses: dict[str, str] = {}
 
     # ── Layout ─────────────────────────────────────────────────────────────────
 
@@ -141,10 +158,11 @@ class RunDashboardScreen(FeatureScreen):
                     tbl.add_row(Text(f"Error: {runs_or_exc}", style="red"))
                     continue
                 for run in runs_or_exc:
-                    color = STATUS_COLORS.get(run.status, "dim")
+                    display_status = self._advance_status(run.run_id, run.status)
+                    color = STATUS_COLORS.get(display_status, "dim")
                     tbl.add_row(
                         Text(run.run_id),
-                        Text(run.status, style=color),
+                        Text(display_status, style=color),
                         Text(run.submitted_at.strftime("%m-%d %H:%M")),
                         key=run.run_id,
                     )
@@ -157,6 +175,35 @@ class RunDashboardScreen(FeatureScreen):
 
         finally:
             self._refreshing = False
+
+    # ── Simulation helper ──────────────────────────────────────────────────────
+
+    def _advance_status(self, run_id: str, repo_status: str) -> str:
+        """Return a display status, randomly advancing from the last shown value.
+
+        Terminal statuses (done / failed) are always kept as-is.
+        Non-terminal statuses start from the last displayed value (or the
+        Repository value on the first poll) and have a 40 % chance to
+        progress each refresh cycle.
+        """
+        if repo_status in ("done", "failed"):
+            # Terminal — freeze it; no point showing it as anything else.
+            self._display_statuses[run_id] = repo_status
+            return repo_status
+
+        last = self._display_statuses.get(run_id, repo_status)
+        # Once we simulated a terminal state, keep it terminal.
+        if last in ("done", "failed"):
+            return last
+
+        options = _ADVANCE.get(last)
+        if options and random.random() < 0.4:
+            next_status = random.choice(options)
+        else:
+            next_status = last
+
+        self._display_statuses[run_id] = next_status
+        return next_status
 
     # ── Actions ────────────────────────────────────────────────────────────────
 
