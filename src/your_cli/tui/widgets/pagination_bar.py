@@ -46,10 +46,10 @@ class PaginationBar(Widget):
         align: left middle;
     }
     PaginationBar > #pgbar-label {
-        width: 1fr;
+        width: auto;
         height: 3;
         padding: 0 2;
-        content-align: center middle;
+        content-align: left middle;
         color: $text-muted;
     }
     """
