@@ -19,8 +19,9 @@ from .cards import (
     SparklineCard,
     TimelineCard,
 )
-from .metric       import MetricCard
-from .status_badge import StatusBadge
+from .metric          import MetricCard
+from .pagination_bar  import PaginationBar
+from .status_badge    import StatusBadge
 
 __all__ = [
     # Cards
@@ -36,5 +37,6 @@ __all__ = [
     "TimelineCard",
     # Standalone
     "MetricCard",
+    "PaginationBar",
     "StatusBadge",
 ]

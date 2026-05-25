@@ -6,11 +6,12 @@ from pathlib import Path
 from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
-from textual.widgets import Button, DataTable, Footer, Header, Static
+from textual.widgets import DataTable, Footer, Header
 
 from your_cli.tui.feature_screen import FeatureScreen
 from your_cli.tui.paginator import Paginator
 from your_cli.tui.palette import STATUS_COLORS
+from your_cli.tui.widgets import PaginationBar
 
 _TYPES   = ["training", "validation", "export", "inference", "preprocessing"]
 _TENANTS = ["jhu", "unc", "mayo"]
@@ -46,11 +47,7 @@ class PaginationDemoScreen(FeatureScreen):
         with Vertical(id="page-body"):
             yield DataTable(id="page-table", cursor_type="row")
             with Horizontal(id="page-controls"):
-                yield Button("|◀",      id="btn-pg-first", disabled=True)
-                yield Button("◀  Prev", id="btn-pg-prev",  disabled=True)
-                yield Static("", id="page-label")
-                yield Button("Next  ▶", id="btn-pg-next")
-                yield Button("▶|",      id="btn-pg-last")
+                yield PaginationBar(id="page-pbar")
         yield Footer()
 
     def on_mount(self) -> None:
@@ -72,15 +69,11 @@ class PaginationDemoScreen(FeatureScreen):
                 item["type"],
                 item["duration"],
             )
-        total = self._pager.total
-        self.query_one("#page-label", Static).update(
-            f"  Page [b]{self._pager.display_page}[/b] of [b]{self._pager.page_count}[/b]"
-            f"  [dim](rows {start + 1}–{min(end, total)} of {total})[/dim]  "
-        )
-        self.query_one("#btn-pg-first", Button).disabled = self._pager.at_first
-        self.query_one("#btn-pg-prev",  Button).disabled = self._pager.at_first
-        self.query_one("#btn-pg-next",  Button).disabled = self._pager.at_last
-        self.query_one("#btn-pg-last",  Button).disabled = self._pager.at_last
+        self.query_one(PaginationBar).update(self._pager)
+
+    def on_pagination_bar_navigated(self, event: PaginationBar.Navigated) -> None:
+        if getattr(self._pager, event.action)():
+            self._render_page()
 
     def action_prev_page(self) -> None:
         if self._pager.prev():
@@ -89,16 +82,3 @@ class PaginationDemoScreen(FeatureScreen):
     def action_next_page(self) -> None:
         if self._pager.next():
             self._render_page()
-
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        match event.button.id:
-            case "btn-pg-first":
-                if self._pager.first():
-                    self._render_page()
-            case "btn-pg-prev":
-                self.action_prev_page()
-            case "btn-pg-next":
-                self.action_next_page()
-            case "btn-pg-last":
-                if self._pager.last():
-                    self._render_page()

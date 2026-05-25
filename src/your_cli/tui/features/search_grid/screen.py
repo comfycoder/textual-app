@@ -6,7 +6,7 @@ from typing import Any
 from rich.text import Text
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.containers import Horizontal, ScrollableContainer, Vertical
+from textual.containers import Horizontal, Vertical
 from your_cli.tui.feature_screen import FeatureScreen
 from textual.widgets import (
     Button,
@@ -18,6 +18,8 @@ from textual.widgets import (
     Select,
     Static,
 )
+
+from your_cli.tui.widgets import PaginationBar
 
 from your_cli.tui.features.search_grid._data import (
     _DEFAULT_PAGE_SIZE,
@@ -98,11 +100,7 @@ class SearchGridDemoScreen(FeatureScreen):
 
             # ── Pagination bar ────────────────────────────────────
             with Horizontal(id="sg-pagination"):
-                yield Button("|← First", id="btn-sg-first", disabled=True)
-                yield Button("← Prev",   id="btn-sg-prev",  disabled=True)
-                yield Static("", id="sg-page-label")
-                yield Button("Next →",   id="btn-sg-next",  disabled=True)
-                yield Button("Last →|",  id="btn-sg-last",  disabled=True)
+                yield PaginationBar(id="sg-pbar")
                 yield Static("", id="sg-result-count")
 
         yield Footer()
@@ -218,13 +216,7 @@ class SearchGridDemoScreen(FeatureScreen):
         self.query_one("#sg-result-count", Static).update(
             f"[dim]({total} record{'s' if total != 1 else ''})[/dim]"
         )
-        self.query_one("#sg-page-label", Static).update(
-            f"  Page {self._pager.display_page} of {self._pager.page_count}  "
-        )
-        self.query_one("#btn-sg-first", Button).disabled = self._pager.at_first
-        self.query_one("#btn-sg-prev",  Button).disabled = self._pager.at_first
-        self.query_one("#btn-sg-next",  Button).disabled = self._pager.at_last
-        self.query_one("#btn-sg-last",  Button).disabled = self._pager.at_last
+        self.query_one(PaginationBar).update(self._pager)
 
     # ── Button / row events ───────────────────────────────────────
 
@@ -234,18 +226,10 @@ class SearchGridDemoScreen(FeatureScreen):
                 self._run_search()
             case "btn-sg-clear":
                 self._clear_search()
-            case "btn-sg-first":
-                if self._pager.first():
-                    self._load_page()
-            case "btn-sg-prev":
-                if self._pager.prev():
-                    self._load_page()
-            case "btn-sg-next":
-                if self._pager.next():
-                    self._load_page()
-            case "btn-sg-last":
-                if self._pager.last():
-                    self._load_page()
+
+    def on_pagination_bar_navigated(self, event: PaginationBar.Navigated) -> None:
+        if getattr(self._pager, event.action)():
+            self._load_page()
 
     def on_input_submitted(self, event: Input.Submitted) -> None:
         if event.input.id == "sg-q":

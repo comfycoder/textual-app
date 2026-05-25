@@ -68,21 +68,24 @@ AIQ_CLIENT_ID=00000000-0000-0000-0000-000000000000
 
 ## Adding a new demo screen
 
-Three touch-points are required every time:
+Two touch-points are required every time:
 
 1. **Create** `src/your_cli/tui/features/<key>/` containing three files:
    - `__init__.py` — one line: `"""Feature package."""`
    - `screen.py` — `Screen[None]` subclass with `CSS_PATH = Path(__file__).parent / "styles.tcss"` and `BINDINGS = [Binding("escape", "go_back", "Back")]`
    - `styles.tcss` — feature-scoped CSS (can be empty to start)
 
-2. **Register the gallery entry** in `GalleryScreen.DEMOS` (`features/gallery/screen.py`) — add a `("Display Name", "<key>", "one-line description")` tuple.
-
-3. **Register the route** in `routes.py` — add one line:
+2. **Register the route** in `routes.py` — add one entry at the position where you want it to appear in the gallery list:
    ```python
-   register("<key>", "your_cli.tui.features.<key>.screen", "YourScreenClass")
+   register("<key>",
+            "your_cli.tui.features.<key>.screen", "YourScreenClass",
+            display_name="Human-readable Name",
+            description="One-line description shown in the gallery detail pane")
    ```
 
-`GalleryScreen._open_demo()` calls `navigate(self.app, key)`, which picks up the new entry automatically. No other files need to change.
+`GalleryScreen` reads the demo list from the route registry at instantiation time, so no other files need to change. The gallery display order matches the registration order in `routes.py`.
+
+**Non-gallery screens** (child screens pushed directly via `app.push_screen()`) omit `display_name` and `description` — they go in `routes.py` only if they need to be addressable by key, which data-bound screens typically do not (see ADR-0001).
 
 ---
 

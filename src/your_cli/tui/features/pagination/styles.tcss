@@ -8,13 +8,12 @@
 
 #page-controls {
     height: auto;
-    padding: 1 0;
     align: left middle;
     background: $panel;
     border-top: solid $primary;
 }
 
-#page-label {
-    width: 1fr;
-    content-align: center middle;
+/* Give the PaginationBar the same vertical rhythm as the old button row. */
+#page-controls > PaginationBar {
+    padding: 1 0;
 }
