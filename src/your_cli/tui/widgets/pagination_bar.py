@@ -17,9 +17,10 @@ Usage::
             return
         _nav = {"first": self._pager.first, "prev": self._pager.prev,
                 "next":  self._pager.next,  "last": self._pager.last}
-        if nav := _nav.get(event.action):
-            if nav():
-                self._load_page()
+        if (nav := _nav.get(event.action)) is None:
+            raise ValueError(f"Unknown PaginationBar action: {event.action!r}")
+        if nav():
+            self._load_page()
 """
 
 from __future__ import annotations

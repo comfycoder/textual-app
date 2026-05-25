@@ -76,9 +76,10 @@ class PaginationDemoScreen(FeatureScreen):
             return
         _nav = {"first": self._pager.first, "prev": self._pager.prev,
                 "next":  self._pager.next,  "last": self._pager.last}
-        if nav := _nav.get(event.action):
-            if nav():
-                self._render_page()
+        if (nav := _nav.get(event.action)) is None:
+            raise ValueError(f"Unknown PaginationBar action: {event.action!r}")
+        if nav():
+            self._render_page()
 
     def action_prev_page(self) -> None:
         if self._pager.prev():
