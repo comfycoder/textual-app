@@ -1,0 +1,95 @@
+/* ══════════════════════════════════════════════════════
+   WorkItemCardsScreen
+   ══════════════════════════════════════════════════════ */
+
+#wic-body {
+    height: 1fr;
+}
+
+/* ── Filter bar ──────────────────────────────────────── */
+
+#wic-filter-bar {
+    height: auto;
+    padding: 1 2;
+    background: $surface;
+    border-bottom: solid $panel;
+}
+
+.wic-filter-field {
+    width: 26;
+    margin-right: 2;
+    height: auto;
+}
+
+/* ── Summary line ────────────────────────────────────── */
+
+#wic-summary {
+    height: 1;
+    padding: 0 2;
+    margin-top: 1;
+    color: $text-muted;
+}
+
+/* ── Card grid ───────────────────────────────────────── */
+
+#wic-scroll {
+    height: 1fr;
+    padding: 1 2;
+}
+
+#wic-grid {
+    layout: grid;
+    grid-size: 3;
+    grid-gutter: 1 2;
+    height: auto;
+}
+
+/*
+ * Three card states — neutral backgrounds only, run state never changes colour
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Inactive  — $surface   + $primary border   (all cards identical)
+ * Active    — $boost     + $accent  border   (hover OR focus, identical)
+ * Pressed   — $accent 20% flash              (150 ms, added by Python)
+ */
+
+.wic-card {
+    background: $surface;
+    border: solid $primary;
+}
+
+.wic-card:hover,
+.wic-card:focus {
+    background: $boost;
+    border: solid $accent;
+}
+
+.wic-card.wic-pressing {
+    background: $accent 20%;
+    border: solid $accent;
+}
+
+
+/* ══════════════════════════════════════════════════════
+   WorkItemDetailScreen
+   ══════════════════════════════════════════════════════ */
+
+#wid-body {
+    padding: 2 4;
+}
+
+#wid-title {
+    margin-bottom: 2;
+    padding-bottom: 1;
+    border-bottom: solid $panel;
+    height: auto;
+}
+
+#wid-cards {
+    height: auto;
+    margin-bottom: 2;
+}
+
+#wid-notes {
+    height: auto;
+    width: 50%;
+}

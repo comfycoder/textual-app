@@ -1,0 +1,51 @@
+/* ══════════════════════════════════════════════════════
+   LargeDatasetDemoScreen
+   ══════════════════════════════════════════════════════ */
+
+#ld-body {
+    height: 1fr;
+    padding: 0 1;
+}
+
+/* ── Hint bar ────────────────────────────────────────── */
+
+#ld-hint {
+    height: auto;
+    padding: 1 1;
+    margin-bottom: 1;
+    color: $text-muted;
+}
+
+/* ── DataTable — fills all remaining space ───────────── */
+
+#ld-table {
+    height: 1fr;
+}
+
+/* ── Footer bar: status + jump input ────────────────── */
+
+#ld-footer {
+    height: auto;
+    padding: 1 0;
+    align: left middle;
+}
+
+#ld-status {
+    width: 1fr;
+    height: 3;
+    content-align: left middle;
+    padding: 0 1;
+    color: $text;
+}
+
+#ld-jump-label {
+    width: auto;
+    height: 3;
+    content-align: left middle;
+    padding: 0 1;
+    color: $text-muted;
+}
+
+#ld-jump {
+    width: 14;
+}

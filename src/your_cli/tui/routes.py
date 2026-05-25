@@ -214,7 +214,47 @@ register("cards2",
          display_name="Card Patterns II",
          description="Timeline, Pricing, Sparkline, Activity, and Comparison cards")
 
+register("modaldialogs",
+         "your_cli.tui.features.modal_dialogs.screen", "ModalDialogsDemoScreen",
+         display_name="Modal Dialogs",
+         description="Alert, Confirm, Input, Selection, Form, and Progress modal patterns with typed return values")
+
+register("workitemcards",
+         "your_cli.tui.features.work_item_cards.screen", "WorkItemCardsScreen",
+         display_name="Work Item Cards",
+         description="Status-coloured card grid — click or Enter on any card to drill into full detail")
+
 register("dicomnrrd",
          "your_cli.tui.features.dicom_nrrd.screen", "DicomNrrdDemoScreen",
          display_name="DICOM → NRRD",
          description="Batch conversion dashboard: progress, volume metadata, validation alerts, activity log")
+
+register("clipboard",
+         "your_cli.tui.features.clipboard.screen", "ClipboardDemoScreen",
+         display_name="Clipboard Copy",
+         description="app.copy_to_clipboard() — copy plain text, commands, JSON, and CSV with toast feedback")
+
+register("runhistory",
+         "your_cli.tui.features.run_history.screen", "RunHistoryScreen",
+         display_name="Run History Browser",
+         description="Paginated run list with date-range filter and tenant selector — exercises Repository.get_runs()")
+
+register("reactives",
+         "your_cli.tui.features.reactives.screen", "ReactivesDemoScreen",
+         display_name="Reactive Attributes",
+         description="reactive + watch_ patterns: counter, RGB color mixer, and Input→reactive→fan-out")
+
+register("largedataset",
+         "your_cli.tui.features.large_dataset.screen", "LargeDatasetDemoScreen",
+         display_name="Large Dataset",
+         description="5 000-row DataTable with virtual scrolling, column sort, move_cursor(), and jump-to-row")
+
+register("reorder",
+         "your_cli.tui.features.reorder.screen", "ReorderDemoScreen",
+         display_name="Reorder List",
+         description="Alt+↑/↓ keyboard reordering of a ListView — no native drag needed")
+
+register("rundashboard",
+         "your_cli.tui.features.run_dashboard.screen", "RunDashboardScreen",
+         display_name="Run Dashboard",
+         description="Multi-tenant 2×2 grid: concurrent asyncio.gather() + Repository.get_recent_runs() + live polling")

@@ -1,0 +1,121 @@
+/* ══════════════════════════════════════════════════════
+   ReactivesDemoScreen
+   ══════════════════════════════════════════════════════ */
+
+#ra-body {
+    padding: 1 3;
+}
+
+/* ── Section titles and hints ────────────────────────── */
+
+.ra-section {
+    height: auto;
+    margin-top: 2;
+    margin-bottom: 0;
+    color: $accent;
+}
+
+.ra-hint {
+    height: auto;
+    margin-top: 1;
+    margin-bottom: 1;
+    color: $text-muted;
+}
+
+/* ── Generic value display ───────────────────────────── */
+
+.ra-display {
+    height: auto;
+    padding: 0 1;
+    margin-bottom: 1;
+    border-left: solid $panel;
+    color: $text;
+}
+
+/* ── Pattern 1: Counter ──────────────────────────────── */
+
+.ra-btn-row {
+    height: auto;
+    margin-bottom: 1;
+}
+
+.ra-btn {
+    margin-right: 1;
+}
+
+/* ── Pattern 2: Color mixer ──────────────────────────── */
+
+#ra-color-area {
+    height: auto;
+    margin-bottom: 1;
+    align: left top;
+}
+
+#ra-channels {
+    height: auto;
+    width: auto;
+    margin-right: 2;
+}
+
+.ra-channel-row {
+    height: auto;
+    margin-bottom: 1;
+    align: left middle;
+}
+
+.ra-channel-label {
+    width: 2;
+    height: 3;
+    content-align: left middle;
+    color: $accent;
+}
+
+.ra-small-btn {
+    min-width: 3;
+    width: 3;
+}
+
+.ra-channel-val {
+    width: 4;
+    height: 3;
+    content-align: center middle;
+    text-align: center;
+    color: $text;
+}
+
+#ra-color-swatch {
+    width: 12;
+    height: 9;
+    margin-right: 2;
+    border: solid $panel;
+}
+
+#ra-color-info {
+    height: auto;
+    width: auto;
+    align: left middle;
+}
+
+#ra-color-hex {
+    height: auto;
+    margin-bottom: 1;
+    color: $text;
+}
+
+#ra-color-tip {
+    height: auto;
+    color: $text-muted;
+}
+
+/* ── Pattern 3: Name inputs ──────────────────────────── */
+
+.ra-name-row {
+    height: auto;
+    margin-bottom: 1;
+}
+
+.ra-name-field {
+    height: auto;
+    width: 1fr;
+    margin-right: 2;
+}

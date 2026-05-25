@@ -1,0 +1,77 @@
+/* ══════════════════════════════════════════════════════
+   RunDashboardScreen
+   ══════════════════════════════════════════════════════ */
+
+#rd-body {
+    height: 1fr;
+    padding: 1 2;
+}
+
+/* ── Top status bar ──────────────────────────────────── */
+
+#rd-topbar {
+    height: auto;
+    margin-bottom: 1;
+    align: left middle;
+}
+
+#rd-indicator {
+    width: auto;
+    height: 3;
+    content-align: left middle;
+    padding: 0 1 0 0;
+}
+
+#rd-last-updated {
+    width: auto;
+    height: 3;
+    content-align: left middle;
+    color: $text-muted;
+}
+
+#rd-countdown {
+    width: 1fr;
+    height: 3;
+    content-align: left middle;
+    color: $text-muted;
+}
+
+.rd-refresh-btn {
+    width: auto;
+}
+
+/* ── 2 × 2 tenant grid ───────────────────────────────── */
+
+#rd-grid {
+    height: 1fr;
+}
+
+.rd-panel {
+    width: 1fr;
+    height: 1fr;
+    margin-right: 1;
+    border: solid $panel;
+}
+
+.rd-panel:last-of-type {
+    margin-right: 0;
+}
+
+/* ── Panel title bar ─────────────────────────────────── */
+
+.rd-panel-title {
+    height: 1;
+    padding: 0 1;
+    background: $panel;
+    color: $accent;
+    content-align: left middle;
+}
+
+/* ── Per-tenant DataTable fills remaining panel height ── */
+
+#rd-table-jhu,
+#rd-table-unc,
+#rd-table-mayo,
+#rd-table-stanford {
+    height: 1fr;
+}

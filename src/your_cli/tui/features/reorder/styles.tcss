@@ -1,0 +1,44 @@
+/* ══════════════════════════════════════════════════════
+   ReorderDemoScreen
+   ══════════════════════════════════════════════════════ */
+
+#ro-body {
+    height: 1fr;
+    padding: 1 2;
+}
+
+/* ── Title ───────────────────────────────────────────── */
+
+#ro-title {
+    height: auto;
+    margin-bottom: 1;
+    color: $text;
+}
+
+/* ── List — fills all remaining space ────────────────── */
+
+#ro-list {
+    height: 1fr;
+    border: solid $panel;
+    margin-bottom: 1;
+}
+
+/* ── Current order display ───────────────────────────── */
+
+.ro-result {
+    height: auto;
+    padding: 0 1;
+    margin-bottom: 1;
+    border-left: solid $panel;
+    color: $text;
+}
+
+/* ── Action buttons ──────────────────────────────────── */
+
+#ro-actions {
+    height: auto;
+}
+
+.ro-btn {
+    margin-right: 1;
+}
