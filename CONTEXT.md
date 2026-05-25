@@ -72,7 +72,7 @@ _Avoid_: Pager, page state
 
 > **Dev:** We need a new demo that shows a filterable list of work items by tenant. Where do we start?
 >
-> **Domain expert:** It's a new **demo**, so it gets its own feature package under `features/`. Give it a **route key** — say `"tenantlist"` — and add a `register()` call in `routes.py` plus an entry in `GalleryScreen.DEMOS`. Both must use the same key string. Use the work item seed data in `search_grid/_data.py` for the records.
+> **Domain expert:** It's a new **demo**, so it gets its own feature package under `features/`. Give it a **route key** — say `"tenantlist"` — and add a `register()` call in `routes.py` with `display_name=` and `description=`. That's the only file to edit — the gallery reads its list from the route registry at startup. Use the work item seed data in `search_grid/_data.py` for the records.
 >
 > **Dev:** The list will need pagination. Do I write the slice logic myself?
 >
