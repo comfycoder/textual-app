@@ -37,13 +37,6 @@
     width: 1fr;
 }
 
-#sg-result-count {
-    width: auto;
-    height: 3;
-    padding: 0 1;
-    color: $text-muted;
-    content-align: left middle;
-}
 
 #sg-per-page-label {
     width: auto;

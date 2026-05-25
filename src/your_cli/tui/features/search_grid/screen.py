@@ -101,7 +101,6 @@ class SearchGridDemoScreen(FeatureScreen):
             # ── Pagination bar ────────────────────────────────────
             with Horizontal(id="sg-pagination"):
                 yield PaginationBar(id="sg-pbar")
-                yield Static("", id="sg-result-count")
 
         yield Footer()
 
@@ -212,10 +211,6 @@ class SearchGridDemoScreen(FeatureScreen):
                 height=None,
             )
 
-        total = self._pager.total
-        self.query_one("#sg-result-count", Static).update(
-            f"[dim]({total} record{'s' if total != 1 else ''})[/dim]"
-        )
         self.query_one(PaginationBar).update(self._pager)
 
     # ── Button / row events ───────────────────────────────────────
