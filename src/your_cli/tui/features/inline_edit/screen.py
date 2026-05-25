@@ -101,14 +101,29 @@ class InlineEditDemoScreen(FeatureScreen):
     def _save_edit(self) -> None:
         if self._cursor_row >= len(_DATA):
             return
+        name   = self.query_one("#edit-name",   Input ).value.strip()
+        tenant = self.query_one("#edit-tenant", Select).value
+        status = self.query_one("#edit-status", Select).value
+
+        missing = []
+        if not name:
+            missing.append("Name")
+        if not isinstance(tenant, str):
+            missing.append("Tenant")
+        if not isinstance(status, str):
+            missing.append("Status")
+        if missing:
+            self.notify(
+                f"Required: {', '.join(missing)}",
+                title="Cannot save",
+                severity="error",
+            )
+            return
+
         item = _DATA[self._cursor_row]
-        item["name"] = self.query_one("#edit-name", Input).value
-        v = self.query_one("#edit-tenant", Select).value
-        if isinstance(v, str):
-            item["tenant"] = v
-        v = self.query_one("#edit-status", Select).value
-        if isinstance(v, str):
-            item["status"] = v
+        item["name"]   = name
+        item["tenant"] = tenant
+        item["status"] = status
         self._cancel_edit()
         self._refresh_table()
         self.notify(f"[b]{item['id']}[/b] updated.", title="Saved", severity="information")
