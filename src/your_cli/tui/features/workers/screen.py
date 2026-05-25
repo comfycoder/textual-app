@@ -96,4 +96,4 @@ class WorkersDemoScreen(FeatureScreen):
 
     def action_go_back(self) -> None:
         self._active.clear()
-        self.app.pop_screen()
+        super().action_go_back()

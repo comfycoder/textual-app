@@ -36,6 +36,10 @@ class Paginator:
     page_size: int
     page: int = 0       # 0-based
 
+    def __post_init__(self) -> None:
+        if self.page_size < 1:
+            raise ValueError(f"page_size must be ≥ 1, got {self.page_size}")
+
     # ── Derived state ─────────────────────────────────────────────────────────
 
     @property

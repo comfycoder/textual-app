@@ -94,4 +94,4 @@ class LogStreamDemoScreen(FeatureScreen):
 
     def action_go_back(self) -> None:
         self._streaming = False
-        self.app.pop_screen()
+        super().action_go_back()
