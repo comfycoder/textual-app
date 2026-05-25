@@ -72,8 +72,13 @@ class PaginationDemoScreen(FeatureScreen):
         self.query_one(PaginationBar).update(self._pager)
 
     def on_pagination_bar_navigated(self, event: PaginationBar.Navigated) -> None:
-        if getattr(self._pager, event.action)():
-            self._render_page()
+        if event.control is not self.query_one(PaginationBar):
+            return
+        _nav = {"first": self._pager.first, "prev": self._pager.prev,
+                "next":  self._pager.next,  "last": self._pager.last}
+        if nav := _nav.get(event.action):
+            if nav():
+                self._render_page()
 
     def action_prev_page(self) -> None:
         if self._pager.prev():

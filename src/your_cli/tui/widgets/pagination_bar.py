@@ -11,10 +11,15 @@ Usage::
     # After any page change — call update() to sync button states and label:
     self.query_one(PaginationBar).update(self._pager)
 
-    # React to user clicks:
+    # React to user clicks — guard on event.control for identity safety:
     def on_pagination_bar_navigated(self, event: PaginationBar.Navigated) -> None:
-        if getattr(self._pager, event.action)():   # first/prev/next/last
-            self._load_page()
+        if event.control is not self.query_one(PaginationBar):
+            return
+        _nav = {"first": self._pager.first, "prev": self._pager.prev,
+                "next":  self._pager.next,  "last": self._pager.last}
+        if nav := _nav.get(event.action):
+            if nav():
+                self._load_page()
 """
 
 from __future__ import annotations
@@ -58,13 +63,27 @@ class PaginationBar(Widget):
         """Posted when the user clicks First / Prev / Next / Last.
 
         ``event.action`` is one of ``"first"``, ``"prev"``, ``"next"``,
-        ``"last"`` — matching the ``Paginator`` method names, so callers can
-        use ``getattr(pager, event.action)()``.
+        ``"last"``.  ``event.control`` is the ``PaginationBar`` that posted
+        it — use this to guard against multiple bars on the same screen::
+
+            def on_pagination_bar_navigated(self, event: PaginationBar.Navigated) -> None:
+                if event.control is not self.query_one(PaginationBar):
+                    return
         """
 
-        def __init__(self, action: Literal["first", "prev", "next", "last"]) -> None:
+        def __init__(
+            self,
+            bar:    "PaginationBar",
+            action: Literal["first", "prev", "next", "last"],
+        ) -> None:
             super().__init__()
+            self._bar   = bar
             self.action = action
+
+        @property
+        def control(self) -> "PaginationBar":
+            """The ``PaginationBar`` that posted this message."""
+            return self._bar
 
     def compose(self) -> ComposeResult:
         yield Button("|◀ First", id="pgbar-first", disabled=True)
@@ -103,4 +122,4 @@ class PaginationBar(Widget):
         action = _MAP.get(event.button.id or "")
         if action:
             event.stop()  # don't bubble to the screen's on_button_pressed
-            self.post_message(self.Navigated(action))
+            self.post_message(self.Navigated(self, action))
